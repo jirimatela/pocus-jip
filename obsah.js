@@ -7,6 +7,10 @@
    Chybějící obrázek se v aplikaci ukáže jako rámeček s názvem souboru.
 
    V textech "protocol" a "popis" lze použít <strong>tučně</strong>.
+
+   Převzatý (cizí) obrázek – ne z vlastního přístroje – má prevzato: true (v aplikaci se
+   nezobrazuje, je to jen poznámka). Když má být pod popisem uveden zdroj, přidejte
+   zdroj: "Název webu nebo autora".
    ========================================================================= */
 
 window.POCUS = {
@@ -40,11 +44,12 @@ window.POCUS = {
             kalkulacka: "grv",
             obrazkyNadpis: "Sonogramy žaludečního antra",
             obrazky: [
-                { soubor: "gi-1-prazdny",  nazev: "1. Normální / Prázdný", popis: "<strong>Normální kontrahované antrum (prázdný žaludek):</strong> Antrum má terčovitý (bull's eye) vzhled, stěny jsou k sobě přilehlé. Nízká hodnota CSA." },
-                { soubor: "gi-2-tekutina", nazev: "2. Tekutina",           popis: "<strong>Žaludek naplněný tekutinou:</strong> Anechoenní/hypoechoenní náplň. Určeno pro změření CSA (cm²) a výpočet rezidua." },
-                { soubor: "gi-3-jidlo",    nazev: "3. Jídlo",              popis: "<strong>Žaludek s tuhou stravou:</strong> Nehomogenní hyperechoenní náplň s akustickým stínem. Vysoké riziko aspirace!" },
-                { soubor: "gi-4-sonda",    nazev: "4. NGS v žaludku",      popis: "<strong>Nasogastrická sonda v antru:</strong> Hyperechogenní linie sondy, případně vír po bolusu tekutiny." },
-                { soubor: "gi-5-video",    nazev: "5. Video vyšetření",    popis: "<strong>Video:</strong> Ukázka vyšetření v epigastriu konvexní sondou v reálném čase." }
+                { soubor: "gi-1-prazdny",     nazev: "1. Normální / Prázdný", popis: "<strong>Normální kontrahované antrum (prázdný žaludek):</strong> Antrum má terčovitý (bull's eye) vzhled, stěny jsou k sobě přilehlé. Nízká hodnota CSA.", prevzato: true },
+                { soubor: "gi-2-tekutina",    nazev: "2. Tekutina",           popis: "<strong>Žaludek naplněný tekutinou:</strong> Anechoenní/hypoechoenní náplň. Určeno pro změření CSA (cm²) a výpočet rezidua.", prevzato: true },
+                { soubor: "gi-3-jidlo",       nazev: "3. Jídlo",              popis: "<strong>Žaludek s tuhou stravou:</strong> Nehomogenní hyperechoenní náplň s akustickým stínem. Vysoké riziko aspirace!", prevzato: true },
+                { soubor: "gi-4-mereni-csa",  nazev: "4. Měření CSA",         popis: "<strong>Měření plochy antra (CSA):</strong> Obtažení antra po zevním okraji stěny. Naměřenou plochu dosaďte do kalkulačky níže.", prevzato: true },
+                { soubor: "gi-5-video",       nazev: "5. Video vyšetření",    popis: "<strong>Video:</strong> Ukázka vyšetření v epigastriu konvexní sondou v reálném čase." },
+                { soubor: "gi-6-sonda",       nazev: "6. NGS v žaludku",      popis: "<strong>Nasogastrická sonda v antru:</strong> Hyperechogenní linie sondy, případně vír po bolusu tekutiny." }
             ]
         },
 
@@ -81,9 +86,9 @@ window.POCUS = {
             warning: "Absence lung sliding + přítomnost 'Barcode/Stratosphere sign' na M-módu značí PNEUMOTHORAX! Ihned informujte lékaře.",
             obrazkyNadpis: "Sonogramy plic",
             obrazky: [
-                { soubor: "plice-1-a-linie",      nazev: "1. A-linie",      popis: "<strong>A-linie:</strong> Normální aerovaná plíce. Sliding nejlépe ukáže krátké video (.mp4)." },
+                { soubor: "plice-1-normalni",     nazev: "1. Normální nález", popis: "<strong>Normální nález (batwing sign):</strong> Dvě žebra s akustickým stínem, mezi nimi hyperechogenní pleurální linie. Sliding nejlépe ukáže krátké video (.mp4).", prevzato: true },
                 { soubor: "plice-2-b-linie",      nazev: "2. B-linie",      popis: "<strong>B-linie:</strong> Vertikální artefakty od pleury do hloubky; více než 3 v poli = intersticiální syndrom." },
-                { soubor: "plice-3-fluidothorax", nazev: "3. Fluidothorax", popis: "<strong>Fluidothorax:</strong> Anechoenní tekutina nad bránicí." },
+                { soubor: "plice-3-fluidothorax", nazev: "3. Fluidothorax", popis: "<strong>Fluidothorax:</strong> Anechoenní tekutina nad bránicí.", prevzato: true },
                 { soubor: "plice-4-pneumothorax", nazev: "4. Pneumothorax", popis: "<strong>Pneumothorax:</strong> M-mód – barcode/stratosphere sign, bez sliding." }
             ]
         },
@@ -101,8 +106,9 @@ window.POCUS = {
             warning: "Neschopnost stlačit žílu (nestlačitelnost) nebo viditelný echogenní trombus v lumen potvrzuje DVT!",
             obrazkyNadpis: "Sonogramy žil dolní končetiny",
             obrazky: [
-                { soubor: "dvt-1-normalni", nazev: "1. Normální komprese", popis: "<strong>Normální žíla:</strong> Při tlaku sondou plně skolabuje, tepna zůstává otevřená." },
-                { soubor: "dvt-2-trombus",  nazev: "2. Trombus",           popis: "<strong>DVT:</strong> Žíla se tlakem nestlačí, v lumen může být echogenní trombus." }
+                { soubor: "dvt-1-normalni",     nazev: "1. V. femoralis – norma", popis: "<strong>Normální nález v třísle:</strong> Společná femorální tepna (CFA) a žíla (CFV). Při tlaku sondou žíla plně skolabuje, tepna zůstává otevřená.", prevzato: true },
+                { soubor: "dvt-2-mickey-mouse", nazev: "2. Mickey Mouse",         popis: "<strong>„Mickey Mouse“:</strong> Společná femorální tepna (CFA), žíla (CFV) a ústí v. saphena magna (GSV) v příčném řezu.", prevzato: true },
+                { soubor: "dvt-3-trombus-vji",  nazev: "3. Trombus",              popis: "<strong>Trombóza (v. jugularis interna):</strong> Žíla se tlakem nestlačí, v lumen je echogenní trombus. Stejné známky platí pro žíly dolní končetiny.", prevzato: true }
             ]
         },
 
@@ -119,9 +125,10 @@ window.POCUS = {
             warning: "Při nepřítomnosti toku, přítomnosti trombu nebo extravazaci bolusu kanylaci okamžitě přerušte.",
             obrazkyNadpis: "Sonogramy periferních žil",
             obrazky: [
-                { soubor: "pvk-1-zila",       nazev: "1. Žíla v příčném řezu", popis: "<strong>Vyhledání žíly:</strong> Kulatý anechoický průřez, tlakem sondy stlačitelný." },
-                { soubor: "pvk-2-kanylace",   nazev: "2. Kanylace",            popis: "<strong>Kanylace pod USG:</strong> Hrot jehly v žíle (out-of-plane nebo in-plane)." },
-                { soubor: "pvk-3-flush-test", nazev: "3. Flush test",          popis: "<strong>Saline flush test:</strong> Mikrobubliny v žíle potvrzují polohu katétru." }
+                { soubor: "pvk-1-anatomie",   nazev: "1. Anatomie žil paže",   popis: "<strong>Anatomie:</strong> Povrchové žíly (v. cephalica, v. basilica, v. mediana cubiti) a hluboké brachiální žíly.", prevzato: true },
+                { soubor: "pvk-2-zila",       nazev: "2. Žíla v příčném řezu", popis: "<strong>Vyhledání žíly:</strong> Kulatý anechoický průřez, tlakem sondy stlačitelný." },
+                { soubor: "pvk-3-kanylace",   nazev: "3. Kanylace",            popis: "<strong>Kanylace pod USG:</strong> Hrot jehly v žíle (out-of-plane nebo in-plane)." },
+                { soubor: "pvk-4-flush-test", nazev: "4. Flush test",          popis: "<strong>Saline flush test:</strong> Mikrobubliny v žíle potvrzují polohu katétru." }
             ]
         }
     }

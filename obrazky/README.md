@@ -10,11 +10,11 @@ Fotky a videa z iPhonu (`.heic`, `.mov`) se na počítačích s Windows nezobraz
 
 | Orgán | Názvy souborů |
 |---|---|
-| Žaludek | `gi-1-prazdny`, `gi-2-tekutina`, `gi-3-jidlo`, `gi-4-sonda`, `gi-5-video` |
+| Žaludek | `gi-1-prazdny`, `gi-2-tekutina`, `gi-3-jidlo`, `gi-4-mereni-csa`, `gi-5-video`, `gi-6-sonda` |
 | Měchýř | `mechyr-1-pricny`, `mechyr-2-podelny`, `mechyr-3-balonek` |
-| Plíce | `plice-1-a-linie`, `plice-2-b-linie`, `plice-3-fluidothorax`, `plice-4-pneumothorax` |
-| DVT | `dvt-1-normalni`, `dvt-2-trombus` |
-| PVK | `pvk-1-zila`, `pvk-2-kanylace`, `pvk-3-flush-test` |
+| Plíce | `plice-1-normalni`, `plice-2-b-linie`, `plice-3-fluidothorax`, `plice-4-pneumothorax` |
+| DVT | `dvt-1-normalni`, `dvt-2-mickey-mouse`, `dvt-3-trombus-vji` |
+| PVK | `pvk-1-anatomie`, `pvk-2-zila`, `pvk-3-kanylace`, `pvk-4-flush-test` |
 
 Příklad: obrázek prázdného žaludku = `gi-1-prazdny.jpg`.
 
