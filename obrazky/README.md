@@ -1,6 +1,8 @@
 # Obrázky
 
-Sem patří ultrazvukové snímky a krátká videa. Přípona může být `.jpg`, `.png`, `.webp`, `.gif`, u videa `.mp4`, `.webm` nebo `.mov`. Aplikace ji pozná sama.
+Sem patří ultrazvukové snímky a krátká videa. Přípona může být `.jpg`, `.png`, `.webp`, `.gif`, u videa `.mp4` nebo `.webm`. Aplikace ji pozná sama. Název **malými písmeny**, bez diakritiky a mezer.
+
+Fotky a videa z iPhonu (`.heic`, `.mov`) se na počítačích s Windows nezobrazí – převeďte je na `.jpg` / `.mp4`, nebo je dejte agentovi, převede je sám.
 
 **Před nahráním z obrázku odstraňte údaje o pacientovi** (jméno, datum narození, číslo pojištěnce…). Stačí oříznout.
 

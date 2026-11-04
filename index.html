@@ -28,7 +28,7 @@
                     <p class="text-xs text-slate-400">Ošetřovatelské výkony prováděné pod kontrolou ultrazvuku</p>
                 </div>
             </div>
-            <button id="btn-overview" type="button" class="shrink-0 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center space-x-1.5">
+            <button id="btn-overview" type="button" class="shrink-0 min-h-[40px] px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center space-x-1.5">
                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                 <span>Přehled těla</span>
             </button>
@@ -125,14 +125,14 @@
 
             <div id="view-detail" class="hidden scroll-mt-24">
 
-                <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-4">
                     <div>
                         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
                             Ošetřovatelský Výkon
                         </span>
                         <h2 id="module-title" class="text-xl sm:text-2xl font-bold text-white mt-1"></h2>
                     </div>
-                    <div class="shrink-0 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300 flex items-center space-x-1.5">
+                    <div class="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300 flex items-center space-x-1.5">
                         <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
                         <span id="module-probe"></span>
                     </div>
@@ -174,10 +174,10 @@
                     <p class="text-xs text-slate-400">Vzorec: Objem (ml) = 27 + (14.6 × CSA v cm²) - (1.28 × věk)</p>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="text-xs text-slate-300">Plocha CSA (cm²):
-                            <input type="number" id="input-csa" value="4.5" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            <input type="text" inputmode="decimal" id="input-csa" value="4,5" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white focus:outline-none focus:border-cyan-500">
                         </label>
                         <label class="text-xs text-slate-300">Věk pacienta (roky):
-                            <input type="number" id="input-age" value="65" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            <input type="text" inputmode="decimal" id="input-age" value="65" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white focus:outline-none focus:border-cyan-500">
                         </label>
                     </div>
                     <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">
@@ -195,13 +195,13 @@
                     <p class="text-xs text-slate-400">Vzorec: Objem (ml) = Šířka × Výška × Hloubka × 0.52</p>
                     <div class="grid grid-cols-3 gap-2">
                         <label class="text-xs text-slate-300">Šířka (cm):
-                            <input type="number" id="b-w" value="6.0" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                            <input type="text" inputmode="decimal" id="b-w" value="6,0" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white">
                         </label>
                         <label class="text-xs text-slate-300">Výška (cm):
-                            <input type="number" id="b-h" value="7.0" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                            <input type="text" inputmode="decimal" id="b-h" value="7,0" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white">
                         </label>
                         <label class="text-xs text-slate-300">Hloubka (cm):
-                            <input type="number" id="b-d" value="5.0" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                            <input type="text" inputmode="decimal" id="b-d" value="5,0" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white">
                         </label>
                     </div>
                     <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">

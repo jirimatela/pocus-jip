@@ -13,13 +13,13 @@
         rose:    { aktivni: "bg-rose-500/20 border-rose-500 text-rose-200",          text: "text-rose-400" },
         emerald: { aktivni: "bg-emerald-500/20 border-emerald-500 text-emerald-200", text: "text-emerald-400" }
     };
-    const TLACITKO_ZAKLAD = "p-2 rounded-xl text-xs font-semibold border transition text-center";
+    const TLACITKO_ZAKLAD = "p-2 min-h-[40px] rounded-xl text-xs font-semibold border transition text-center";
     const TLACITKO_NEAKTIVNI = "border-slate-700 text-slate-300 hover:bg-slate-800";
     const SLOUPCE = { 1: "sm:grid-cols-1", 2: "sm:grid-cols-2", 3: "sm:grid-cols-3", 4: "sm:grid-cols-4" };
 
     // Jen malá písmena: GitHub Pages rozlišuje velikost písmen (kontrola hlídá názvy souborů).
     const PRIPONY_OBRAZEK = ["jpg", "jpeg", "png", "webp", "gif"];
-    const PRIPONY_VIDEO = ["mp4", "webm", "mov"];
+    const PRIPONY_VIDEO = ["mp4", "webm"]; // .mov a HEVC nehraje Firefox ani Chrome na Windows
 
     const $ = id => document.getElementById(id);
     const barvaModulu = modul => BARVY[modul.barva] || BARVY.cyan;
@@ -205,7 +205,8 @@
 
     /* ---------- Kalkulačky ---------- */
 
-    const cislo = id => parseFloat($(id).value) || 0;
+    // Čárka i tečka: sestry píšou "4,5".
+    const cislo = id => parseFloat(String($(id).value).replace(",", ".")) || 0;
 
     function prepocitej() {
         // GRV podle Perlase: 27 + 14.6 × CSA (cm², poloha RLD) − 1.28 × věk

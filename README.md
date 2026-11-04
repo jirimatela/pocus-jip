@@ -10,7 +10,7 @@ Výuková aplikace pro zdravotní sestry na ARO/JIP: ultrazvukem vedené ošetř
 - „U žaludku přepiš varování na: …"
 - „Vrať poslední změnu"
 
-Agent má pravidla v souboru `CLAUDE.md`: mění jen to, co je potřeba, a před uložením aplikaci zkontroluje. Web se aktualizuje asi do minuty.
+Agent má pravidla v souboru `CLAUDE.md`: mění jen to, co je potřeba, a před uložením aplikaci zkontroluje. Po uložení ji GitHub ještě jednou proklikne v Chrome, Safari a Firefoxu na telefonu, tabletu i počítači. Web se aktualizuje za pár minut, a jen když je všechno v pořádku – jinak zůstane online poslední funkční verze.
 
 **Obrázky ručně:** na GitHubu otevřete složku `obrazky` → *Add file* → *Upload files* a obrázek přetáhněte. Musí mít název podle seznamu v `obrazky/README.md`.
 
@@ -26,4 +26,5 @@ Agent má pravidla v souboru `CLAUDE.md`: mění jen to, co je potřeba, a před
 - `obsah.js` – texty a seznam obrázků (to, co se mění nejčastěji)
 - `obrazky/` – snímky a videa
 - `index.html`, `app.js`, `styl.css` – vzhled a logika
-- `test/kontrola.js` – automatická kontrola (`node test/kontrola.js`)
+- `test/kontrola.js` – automatická kontrola (`npm ci && npx playwright install chromium firefox webkit`, pak `node test/kontrola.js`)
+- `.github/workflows/` – kontrola a zveřejnění webu na GitHubu
