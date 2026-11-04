@@ -158,7 +158,7 @@ const TAJNE = [
 ];
 function textoveSoubory(adr) {
     return fs.readdirSync(adr, { withFileTypes: true }).flatMap(e => {
-        if ([".git", "node_modules", "ukazky"].includes(e.name)) return [];
+        if ([".git", "node_modules", "ukazky", "knihovny"].includes(e.name)) return [];
         const p = path.join(adr, e.name);
         if (e.isDirectory()) return textoveSoubory(p);
         return /\.(html|js|css|md|json|yml|yaml|txt|csv)$/i.test(e.name) && p !== __filename ? [p] : [];
@@ -243,10 +243,36 @@ async function stavMedia(page) {
     }));
 }
 
+// Vejde se obrázek/video celé do rámečku galerie? (Safari ignoruje max-height v rámečku s poměrem stran)
+async function presahujeRamecek(page) {
+    return page.evaluate(() => {
+        const ramecek = document.querySelector("#gallery-display");
+        const media = ramecek.querySelector("img, video");
+        if (!ramecek || !media) return null;
+        const r = ramecek.getBoundingClientRect(), m = media.getBoundingClientRect();
+        let w = m.width, h = m.height;
+        // u object-contain je vykreslená plocha menší než prvek – spočítat skutečný obsah
+        const pw = media.naturalWidth || media.videoWidth, ph = media.naturalHeight || media.videoHeight;
+        if (pw && ph && getComputedStyle(media).objectFit === "contain") {
+            const k = Math.min(w / pw, h / ph); w = pw * k; h = ph * k;
+        }
+        const ven = m.top < r.top - 1 || m.left < r.left - 1 || m.bottom > r.bottom + 1 || m.right > r.right + 1 || w > r.width + 1 || h > r.height + 1;
+        return ven ? `obsah ${Math.round(w)}×${Math.round(h)} px, rámeček ${Math.round(r.width)}×${Math.round(r.height)} px` : null;
+    });
+}
+
 async function zkontrolujStranku({ prohlizec, obrazovka, url, sUkazkami }) {
     const stitek = `[${prohlizec} ${obrazovka}${url.startsWith("file:") ? " ze souboru" : ""}]`;
     const chyba = t => chyby.push(`${stitek} ${t}`);
     const context = await prohlizecInstance[prohlizec].newContext({ ...OBRAZOVKY[obrazovka] });
+    // Aplikace nesmí nic stahovat z internetu (funguje offline, v nemocniční síti i v uzavřeném prostředí agenta)
+    const povolene = ADRESA ? new URL(ADRESA).hostname : "127.0.0.1";
+    await context.route("**/*", route => {
+        const u = new URL(route.request().url());
+        if (u.protocol === "file:" || u.protocol === "data:" || u.protocol === "blob:" || u.hostname === povolene) return route.continue();
+        chyba(`aplikace se pokouší načíst něco z internetu (${u.hostname}) – vše musí být v repozitáři`);
+        return route.abort();
+    });
     const page = await context.newPage();
     page.setDefaultTimeout(15000);
     page.on("pageerror", e => chyba("chyba JavaScriptu: " + e.message));
@@ -270,7 +296,7 @@ async function zkontrolujStranku({ prohlizec, obrazovka, url, sUkazkami }) {
     if (!vykresleno) { chyba("rychlá tlačítka se nevykreslila (chyba v app.js nebo obsah.js?)"); await context.close(); return; }
 
     const tailwind = await page.evaluate(() => getComputedStyle(document.getElementById("view-detail")).display === "none");
-    if (!tailwind) chyba("styly (Tailwind) se nenačetly – je připojení k internetu?");
+    if (!tailwind) chyba("styly (Tailwind) se nenačetly – chybí knihovny/tailwindcss-*.js?");
     await page.waitForFunction(() => document.querySelectorAll("#quick-buttons svg").length > 0, null, { timeout: 10000 }).catch(() => {});
     const spatneIkony = await page.$$eval("#quick-buttons i[data-lucide]", els => els.map(e => e.dataset.lucide));
     for (const ik of spatneIkony) chyba(`ikona "${ik}" neexistuje (názvy viz lucide.dev/icons)`);
@@ -308,6 +334,8 @@ async function zkontrolujStranku({ prohlizec, obrazovka, url, sUkazkami }) {
                 .then(() => true, () => false);
             if (!ok) { chyba(`${klic}: obrázek č. ${i + 1} se nenačetl`); continue; }
             if (await stavMedia(page) === "rozbity") chyba(`${klic}: soubor obrázku č. ${i + 1} (${m.obrazky[i].soubor}) je poškozený nebo ho prohlížeč neumí zobrazit`);
+            const ven = await presahujeRamecek(page);
+            if (ven) chyba(`${klic}: obrázek č. ${i + 1} se nevejde do rámečku a je oříznutý (${ven})`);
         }
         if (m.kalkulacka && !(await page.isVisible(`[data-kalkulacka="${m.kalkulacka}"]`))) chyba(`${klic}: kalkulačka "${m.kalkulacka}" není vidět`);
         await vodorovnyPosun(klic);
@@ -337,6 +365,8 @@ async function zkontrolujStranku({ prohlizec, obrazovka, url, sUkazkami }) {
         if (!img) chyba("galerie: ukázkový obrázek se nezobrazil");
         else {
             if (await stavMedia(page) === "rozbity") chyba("galerie: ukázkový obrázek se nenačetl");
+            const ven = await presahujeRamecek(page);
+            if (ven) chyba(`galerie: velký obrázek se nevejde do rámečku a je oříznutý (${ven})`);
             await img.click();
             if (!(await page.isVisible("#lightbox"))) chyba("galerie: kliknutí na obrázek ho nezvětšilo");
             await page.click("#lightbox");

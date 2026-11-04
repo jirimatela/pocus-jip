@@ -180,14 +180,15 @@
         if (soubor.typ === "video") {
             const v = document.createElement("video");
             Object.assign(v, { src: soubor.src, autoplay: true, loop: true, muted: true, playsInline: true, controls: true });
-            v.className = "max-h-full max-w-full rounded-lg";
+            // absolute + object-contain: Safari jinak nezmenší obsah do rámečku s pevným poměrem stran
+            v.className = "absolute inset-0 w-full h-full object-contain p-2 rounded-lg";
             plocha.appendChild(v);
         } else {
             const img = document.createElement("img");
             img.src = soubor.src;
             img.alt = obrazek.nazev;
             img.title = "Kliknutím zvětšíte";
-            img.className = "max-h-full max-w-full object-contain rounded-lg cursor-zoom-in";
+            img.className = "absolute inset-0 w-full h-full object-contain p-2 rounded-lg cursor-zoom-in";
             img.addEventListener("click", () => zvetsi(soubor.src, obrazek.nazev));
             plocha.appendChild(img);
         }
