@@ -65,7 +65,7 @@ Každá změna se ukládá jako nová verze a kteroukoli lze vrátit.
 **Agent** se navíc řídí pravidly v `CLAUDE.md`:
 - prohlédne každý snímek a video, jestli v obraze není vepsané jméno, datum narození, číslo pojištěnce nebo název nemocnice;
 - nezveřejní popis případu, podle kterého by šlo pacienta poznat;
-- nezveřejní interní dokumenty nemocnice ani cizí obrázky bez licence;
+- nezveřejní interní dokumenty nemocnice a u převzatých snímků z internetu upozorní, že za jejich použití odpovídá autor aplikace;
 - nepřidá žádné sledování ani formuláře;
 - když něco citlivého unikne, okamžitě to ohlásí.
 
