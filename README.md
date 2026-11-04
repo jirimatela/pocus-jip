@@ -39,7 +39,7 @@ U každé oblasti je:
 
 Agent se řídí pravidly v `CLAUDE.md`: mění jen to, co je potřeba, a před uložením aplikaci vyzkouší. Po uložení ji GitHub ještě jednou proklikne v Chrome, Safari a Firefoxu na telefonu, tabletu i počítači. Web se aktualizuje za pár minut, a jen když je všechno v pořádku. Jinak zůstane online poslední funkční verze.
 
-**Nové obrázky a videa:** pošlete je agentovi jako přílohu v chatu a napište, co na nich je (např. „tohle je žaludek s tekutinou"). Klidně i s hlavičkou přístroje: agent odřízne údaje o pacientovi a pracovišti, odstraní skrytá metadata, převede formát a snímek zařadí do aplikace. Originály se do repozitáře neukládají, jen hotové snímky. Velké video z přístroje nejdřív exportujte jako MP4, nebo ho zmenšete v programu [HandBrake](https://handbrake.fr) (předvolba *Fast 720p30*).
+**Nové obrázky a videa:** pošlete je agentovi jako přílohu v chatu a napište, co na nich je (např. „tohle je žaludek s tekutinou"). Klidně i s hlavičkou přístroje: agent odřízne údaje o pacientovi a pracovišti, odstraní skrytá metadata, převede formát a snímek zařadí do aplikace. Originály se do repozitáře neukládají, jen hotové snímky. **Příloha může mít nejvýš 30 MB.** Video z ultrazvuku bývá větší, proto ho nejdřív zmenšete: exportujte ho z přístroje jako MP4, nebo ho otevřete v programu [HandBrake](https://handbrake.fr) (zdarma), zvolte předvolbu *Fast 720p30* a dejte *Start*. Ze stovek MB bude pár MB.
 
 **Texty ručně:** všechny texty jsou v souboru `obsah.js` (na GitHubu ikona tužky).
 

@@ -49,7 +49,7 @@ Autor je posílá **jako přílohu v chatu** a napíše, co na nich je („tohle
 8. **Commitni podle orgánu** (`Měchýř: …`). Do popisu commitu ani do názvu souboru nedávej nic z hlavičky (datum, ID).
 9. **Pošli autorovi přehled:** co jsi zpracoval, co jsi ořízl, co jsi naopak nezveřejnil a proč.
 
-Velké video, které nejde přiložit: poraď autorovi export MP4 z přístroje, nebo zmenšení v programu HandBrake (zdarma, předvolba *Fast 720p30*).
+**Příloha v chatu má limit 30 MB.** Video z ultrazvuku (AVI bez komprese) bývá mnohem větší, takže ho autor musí nejdřív zmenšit sám. Poraď mu export MP4 přímo z přístroje, nebo program HandBrake (zdarma, Mac i Windows): otevřít video → předvolba *Fast 720p30* → *Start*. Hlavičku s údaji nemusí řešit, tu odřízneš ty.
 
 Nástroje: když chybí `magick` nebo `ffmpeg`, nainstaluj je (`apt-get install -y imagemagick ffmpeg`, případně `pip install pillow imageio-ffmpeg`).
 
