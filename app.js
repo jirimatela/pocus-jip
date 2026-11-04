@@ -17,8 +17,9 @@
     const TLACITKO_NEAKTIVNI = "border-slate-700 text-slate-300 hover:bg-slate-800";
     const SLOUPCE = { 1: "sm:grid-cols-1", 2: "sm:grid-cols-2", 3: "sm:grid-cols-3", 4: "sm:grid-cols-4" };
 
-    const PRIPONY_OBRAZEK = ["jpg", "jpeg", "png", "webp", "gif", "JPG", "JPEG", "PNG"];
-    const PRIPONY_VIDEO = ["mp4", "webm", "mov", "MP4", "MOV"];
+    // Jen malá písmena: GitHub Pages rozlišuje velikost písmen (kontrola hlídá názvy souborů).
+    const PRIPONY_OBRAZEK = ["jpg", "jpeg", "png", "webp", "gif"];
+    const PRIPONY_VIDEO = ["mp4", "webm", "mov"];
 
     const $ = id => document.getElementById(id);
     const barvaModulu = modul => BARVY[modul.barva] || BARVY.cyan;
@@ -53,6 +54,16 @@
         });
     }
 
+    // Na webu (https) se ptáme serveru přímo – rychlé a spolehlivé i pro videa na iPhonu.
+    // Lokálně (file://) to nejde, tam zkoušíme soubor načíst jako obrázek/video.
+    const naWebu = location.protocol.startsWith("http");
+    async function existuje(src, jeVideo) {
+        if (naWebu) {
+            try { return (await fetch(src, { method: "HEAD", cache: "no-cache" })).ok; } catch { return false; }
+        }
+        return jeVideo ? zkusVideo(src) : zkusObrazek(src);
+    }
+
     async function najdiSoubor(jmeno) {
         if (jmeno in nalezene) return nalezene[jmeno];
         const zaklad = `${OBSAH.slozkaObrazku}/${jmeno}`;
@@ -62,15 +73,15 @@
         if (tecka > 0) {
             const pripona = jmeno.slice(tecka + 1);
             const jeVideo = PRIPONY_VIDEO.includes(pripona);
-            if (await (jeVideo ? zkusVideo(zaklad) : zkusObrazek(zaklad))) {
+            if (await existuje(zaklad, jeVideo)) {
                 vysledek = { typ: jeVideo ? "video" : "img", src: zaklad };
             }
         } else {
             for (const p of PRIPONY_OBRAZEK) {
-                if (await zkusObrazek(`${zaklad}.${p}`)) { vysledek = { typ: "img", src: `${zaklad}.${p}` }; break; }
+                if (await existuje(`${zaklad}.${p}`, false)) { vysledek = { typ: "img", src: `${zaklad}.${p}` }; break; }
             }
             for (const p of vysledek ? [] : PRIPONY_VIDEO) {
-                if (await zkusVideo(`${zaklad}.${p}`)) { vysledek = { typ: "video", src: `${zaklad}.${p}` }; break; }
+                if (await existuje(`${zaklad}.${p}`, true)) { vysledek = { typ: "video", src: `${zaklad}.${p}` }; break; }
             }
         }
         nalezene[jmeno] = vysledek;
@@ -89,7 +100,7 @@
 
         $("module-title").innerText = modul.title;
         $("module-probe").innerText = modul.probe;
-        $("module-warning").innerText = modul.warning;
+        $("module-warning").innerHTML = modul.warning;
         $("module-protocol").innerHTML = modul.protocol
             .map(p => `<li class="flex items-start space-x-2"><span class="text-cyan-400 font-bold mt-0.5">•</span><span>${p}</span></li>`)
             .join("");
@@ -211,7 +222,7 @@
     function vykresliRychlaTlacitka() {
         const klice = Object.keys(MODULY);
         const box = $("quick-buttons");
-        box.style.gridTemplateColumns = `repeat(${klice.length}, minmax(0, 1fr))`;
+        box.style.gridTemplateColumns = `repeat(auto-fit, minmax(60px, 1fr))`;
         box.innerHTML = klice.map(k => {
             const m = MODULY[k];
             return `<button type="button" data-modul="${k}" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-center text-xs flex flex-col items-center space-y-1 transition">

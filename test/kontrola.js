@@ -14,9 +14,9 @@ const vm = require("vm");
 const { chromium } = require("playwright");
 
 const KOREN = path.resolve(__dirname, "..");
-const PRIPONY = ["jpg", "jpeg", "png", "webp", "gif", "mp4", "webm", "mov"];
-const BARVY = ["amber", "purple", "cyan", "rose", "emerald"];
-const KALKULACKY = ["grv", "mechyr"];
+const PRIPONY = ["jpg", "jpeg", "png", "webp", "gif", "mp4", "webm", "mov"]; // stejné jako v app.js
+const BARVY = ["amber", "purple", "cyan", "rose", "emerald"]; // stejné jako BARVY v app.js
+const KALKULACKY = ["grv", "mechyr"]; // data-kalkulacka v index.html
 
 const chyby = [];
 const upozorneni = [];
@@ -47,18 +47,28 @@ for (const [klic, m] of Object.entries(OBSAH.moduly)) {
     if (!m.tlacitko || !m.tlacitko.popisek || !m.tlacitko.ikona) chyby.push(`${klic}: chybí tlacitko.popisek nebo tlacitko.ikona`);
     if (!BARVY.includes(m.barva)) chyby.push(`${klic}: barva "${m.barva}" není jedna z ${BARVY.join(", ")}`);
     if (m.kalkulacka && !KALKULACKY.includes(m.kalkulacka)) chyby.push(`${klic}: neznámá kalkulačka "${m.kalkulacka}"`);
+    const texty = [m.warning, ...(m.protocol || []), ...(m.obrazky || []).map(o => o.popis || "")];
+    for (const t of texty) {
+        const otevreno = (String(t).match(/<strong>/g) || []).length, zavreno = (String(t).match(/<\/strong>/g) || []).length;
+        if (otevreno !== zavreno) chyby.push(`${klic}: neuzavřené <strong> v textu "${String(t).slice(0, 50)}…"`);
+    }
     for (const [i, o] of (m.obrazky || []).entries()) {
         if (!o.soubor || !o.nazev) { chyby.push(`${klic}: obrázek č. ${i + 1} nemá "soubor" nebo "nazev"`); continue; }
-        const nalez = souboryVeSlozce.filter(f => f === o.soubor ||
-            PRIPONY.some(p => f.toLowerCase() === `${o.soubor}.${p}`.toLowerCase()));
+        if (o.soubor !== o.soubor.toLowerCase()) chyby.push(`${klic}: "soubor" musí být malými písmeny: ${o.soubor}`);
+        const nalez = souboryVeSlozce.filter(f => f === o.soubor || PRIPONY.some(p => f === `${o.soubor}.${p}`));
         nalez.forEach(f => pouzite.add(f));
         if (nalez.length === 0) upozorneni.push(`chybí obrázek ${OBSAH.slozkaObrazku}/${o.soubor}.*  (${klic}: ${o.nazev})`);
         if (nalez.length > 1) upozorneni.push(`víc souborů pro ${o.soubor}: ${nalez.join(", ")} – použije se první nalezený`);
     }
 }
 for (const f of souboryVeSlozce) {
-    const jeMedia = PRIPONY.some(p => f.toLowerCase().endsWith("." + p));
-    if (jeMedia && !pouzite.has(f)) upozorneni.push(`soubor ${OBSAH.slozkaObrazku}/${f} není v obsah.js použitý (překlep v názvu?)`);
+    if (f.startsWith(".") || f === "README.md") continue;
+    const pripona = f.slice(f.lastIndexOf(".") + 1).toLowerCase();
+    if (["heic", "heif"].includes(pripona)) { chyby.push(`${OBSAH.slozkaObrazku}/${f}: formát iPhonu (HEIC) prohlížeče neumí zobrazit – převeďte na .jpg`); continue; }
+    if (!PRIPONY.includes(pripona)) { chyby.push(`${OBSAH.slozkaObrazku}/${f}: nepodporovaný typ souboru`); continue; }
+    if (f !== f.toLowerCase() || /[^a-z0-9.\-]/.test(f)) { chyby.push(`${OBSAH.slozkaObrazku}/${f}: název musí být malými písmeny bez diakritiky a mezer (na webu se jinak nenajde)`); continue; }
+    if (fs.statSync(path.join(KOREN, OBSAH.slozkaObrazku, f)).size > 10 * 1024 * 1024) upozorneni.push(`${OBSAH.slozkaObrazku}/${f} má přes 10 MB – zmenšete ho`);
+    if (!pouzite.has(f)) upozorneni.push(`soubor ${OBSAH.slozkaObrazku}/${f} není v obsah.js použitý (překlep v názvu?)`);
 }
 
 // 2) Prohlížeč: proklikání všech modulů a obrázků
@@ -71,6 +81,13 @@ for (const f of souboryVeSlozce) {
     await page.goto("file://" + path.join(KOREN, "index.html"));
     await page.waitForFunction(() => document.querySelectorAll("#quick-buttons button").length > 0, null, { timeout: 15000 })
         .catch(() => chyby.push("rychlá tlačítka se nevykreslila (chyba v app.js nebo obsah.js?)"));
+
+    // Načetl se Tailwind? (bez něj by třída "hidden" nefungovala)
+    const tailwind = await page.evaluate(() => getComputedStyle(document.getElementById("view-detail")).display === "none");
+    if (!tailwind) chyby.push("styly (Tailwind) se nenačetly – je připojení k internetu?");
+    // Existují všechny ikony? Lucide nahradí <i data-lucide> obrázkem, neznámý název zůstane prázdný.
+    const spatneIkony = await page.$$eval("#quick-buttons i[data-lucide]", els => els.map(e => e.dataset.lucide));
+    for (const ik of spatneIkony) chyby.push(`ikona "${ik}" neexistuje (názvy viz lucide.dev/icons)`);
 
     const hotspoty = await page.$$eval("svg [data-modul]", els => els.map(e => e.dataset.modul));
     for (const h of hotspoty) if (!OBSAH.moduly[h]) chyby.push(`oblast na těle odkazuje na neexistující modul "${h}"`);
@@ -94,14 +111,19 @@ for (const f of souboryVeSlozce) {
     }
 
     // Kalkulačky: známé vstupy → známý výsledek
-    await page.click('#quick-buttons [data-modul="gi"]');
-    await page.fill("#input-csa", "4.5"); await page.fill("#input-age", "65");
-    const grv = await page.textContent("#res-grv");
-    if (grv !== "9.5 ml") chyby.push(`kalkulačka GRV: pro CSA 4.5 a věk 65 vyšlo "${grv}", čekáno "9.5 ml"`);
-    await page.click('#quick-buttons [data-modul="bladder"]');
-    await page.fill("#b-w", "6"); await page.fill("#b-h", "7"); await page.fill("#b-d", "5");
-    const mechyr = await page.textContent("#res-bladder");
-    if (mechyr !== "109.2 ml") chyby.push(`kalkulačka měchýře: pro 6×7×5 vyšlo "${mechyr}", čekáno "109.2 ml"`);
+    const sKalkulackou = typ => Object.keys(OBSAH.moduly).find(k => OBSAH.moduly[k].kalkulacka === typ);
+    const TESTY_KALKULACEK = {
+        grv:    { vstupy: { "#input-csa": "4.5", "#input-age": "65" }, vystup: "#res-grv", cekam: "9.5 ml" },
+        mechyr: { vstupy: { "#b-w": "6", "#b-h": "7", "#b-d": "5" }, vystup: "#res-bladder", cekam: "109.2 ml" }
+    };
+    for (const [typ, t] of Object.entries(TESTY_KALKULACEK)) {
+        const klic = sKalkulackou(typ);
+        if (!klic) continue;
+        await page.click(`#quick-buttons [data-modul="${klic}"]`);
+        for (const [sel, hodnota] of Object.entries(t.vstupy)) await page.fill(sel, hodnota);
+        const vysledek = await page.textContent(t.vystup);
+        if (vysledek !== t.cekam) chyby.push(`kalkulačka ${typ}: vyšlo "${vysledek}", čekáno "${t.cekam}"`);
+    }
 
     await browser.close();
 

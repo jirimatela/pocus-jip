@@ -18,13 +18,16 @@ Web běží na GitHub Pages z větve `main`. Co se uloží do `main`, je do minu
 ## Pravidla
 
 1. **Upravuj jen to místo, kterého se požadavek týká.** Nikdy nepřepisuj celý soubor ani aplikaci „načisto". Nic nepřejmenovávej a neměň vzhled, pokud o to autor výslovně nepožádá.
-2. **Obsah patří do `obsah.js`, ne do `app.js` ani do `index.html`.** Texty v `protocol` a `popis` smí obsahovat `<strong>`.
+2. **Obsah patří do `obsah.js`, ne do `app.js` ani do `index.html`.** Texty v `protocol`, `warning` a `popis` smí obsahovat `<strong>` (vždy uzavřený). Klíče modulů (`gi`, `bladder`…) nepřejmenovávej – odkazuje na ně tělo v `index.html`.
 3. **Obrázky jsou vždy samostatné soubory v `obrazky/`.** Nikdy je nevkládej do kódu jako base64 a nikdy negeneruj vymyšlené nebo kreslené „sonogramy". Když obrázek chybí, nech ho chybět: aplikace sama ukáže rámeček s názvem souboru.
-   - Název souboru: malá písmena, bez diakritiky a mezer, podle vzoru `<orgán>-<pořadí>-<popis>` (např. `plice-5-vypotek.jpg`). Pole `soubor` v `obsah.js` píšeš bez přípony.
+   - Název souboru: **jen malá písmena** (i přípona), bez diakritiky a mezer, podle vzoru `<orgán>-<pořadí>-<popis>` (např. `plice-5-vypotek.jpg`). Web na GitHubu rozlišuje velká a malá písmena, `Plice.JPG` by se tam nenašel, i když na Macu funguje. Soubor s jiným názvem přejmenuj. Pole `soubor` v `obsah.js` píšeš bez přípony.
+   - Fotky z iPhonu (`.heic`) prohlížeče neumí – převeď je na `.jpg` (např. `magick x.heic x.jpg`, `heif-convert`), jinak požádej autora o JPG. Video z iPhonu (`.mov`) ideálně převeď na `.mp4` (H.264), jinak se ve Windows nemusí přehrát.
    - Obrázky větší než ~1 MB zmenši (delší strana 1600 px stačí). Videa nad ~10 MB nedávej do repozitáře a řekni to autorovi.
 4. **Ochrana dat pacientů.** Každý nový obrázek si prohlédni. Když je na něm jméno, rodné číslo, datum narození, číslo pojištěnce nebo jiný údaj o pacientovi, **neukládej ho** a požádej autora o oříznutou verzi. Repozitář i web jsou veřejné.
 5. **Medicínský obsah je na autorovi.** Texty, vzorce a doporučení neměň z vlastní iniciativy. Když ti něco přijde odborně sporné, zeptej se.
-6. **Nový orgán / modul:** přidej položku do `obsah.js` (povinné: `title`, `tlacitko {popisek, ikona}`, `barva` – jedna z amber/purple/cyan/rose/emerald, `probe`, `protocol`, `warning`, volitelně `obrazkyNadpis`, `obrazky`, `kalkulacka`). Tlačítko dole se vytvoří samo. Klikací oblast na těle přidej do SVG v `index.html` jako `<g data-modul="klic">`. Ikony: názvy z lucide.dev.
+6. **Nový orgán / modul:** přidej položku do `obsah.js` (povinné: `title`, `tlacitko {popisek, ikona}`, `barva`, `probe`, `protocol`, `warning`; volitelně `obrazkyNadpis`, `obrazky`, `kalkulacka`). Tlačítko dole se vytvoří samo. Klikací oblast na těle přidej do SVG v `index.html` jako `<g data-modul="klic">`. Ikony: názvy z lucide.dev/icons.
+   - **Nová barva** (mimo amber/purple/cyan/rose/emerald): doplň ji do `BARVY` v `app.js` i v `test/kontrola.js` (celé názvy tříd vypsané, Tailwind z CDN jinak třídu nevygeneruje).
+   - **Nová kalkulačka:** blok s `data-kalkulacka="nazev"` v `index.html`, výpočet ve funkci `prepocitej` v `app.js`, název do `KALKULACKY` a test se známým výsledkem do `TESTY_KALKULACEK` v `test/kontrola.js`.
 7. **Po každé změně spusť kontrolu** a oprav chyby, než změnu uložíš:
    ```
    node test/kontrola.js
