@@ -43,7 +43,8 @@ window.POCUS = {
                 { soubor: "gi-1-prazdny",  nazev: "1. Normální / Prázdný", popis: "<strong>Normální kontrahované antrum (prázdný žaludek):</strong> Antrum má terčovitý (bull's eye) vzhled, stěny jsou k sobě přilehlé. Nízká hodnota CSA." },
                 { soubor: "gi-2-tekutina", nazev: "2. Tekutina",           popis: "<strong>Žaludek naplněný tekutinou:</strong> Anechoenní/hypoechoenní náplň. Určeno pro změření CSA (cm²) a výpočet rezidua." },
                 { soubor: "gi-3-jidlo",    nazev: "3. Jídlo",              popis: "<strong>Žaludek s tuhou stravou:</strong> Nehomogenní hyperechoenní náplň s akustickým stínem. Vysoké riziko aspirace!" },
-                { soubor: "gi-4-sonda",    nazev: "4. NGS v žaludku",      popis: "<strong>Nasogastrická sonda v antru:</strong> Hyperechogenní linie sondy, případně vír po bolusu tekutiny." }
+                { soubor: "gi-4-sonda",    nazev: "4. NGS v žaludku",      popis: "<strong>Nasogastrická sonda v antru:</strong> Hyperechogenní linie sondy, případně vír po bolusu tekutiny." },
+                { soubor: "gi-5-video",    nazev: "5. Video vyšetření",    popis: "<strong>Video:</strong> Ukázka vyšetření v epigastriu konvexní sondou v reálném čase." }
             ]
         },
 
