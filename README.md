@@ -39,22 +39,22 @@ U každé oblasti je:
 
 Agent se řídí pravidly v `CLAUDE.md`: mění jen to, co je potřeba, a před uložením aplikaci vyzkouší. Po uložení ji GitHub ještě jednou proklikne v Chrome, Safari a Firefoxu na telefonu, tabletu i počítači. Web se aktualizuje za pár minut, a jen když je všechno v pořádku. Jinak zůstane online poslední funkční verze.
 
-**Obrázky ručně:** na GitHubu otevřete složku `obrazky` → *Add file* → *Upload files* a obrázek přetáhněte. Musí mít název podle seznamu v [`obrazky/README.md`](obrazky/README.md).
+**Nové obrázky:** na GitHubu otevřete složku [`nove-obrazky`](nove-obrazky/) → *Add file* → *Upload files* a soubory přetáhněte tak, jak jsou, i s hlavičkou přístroje. Tento repozitář je soukromý a složka se nezveřejňuje. Pak agentovi napište „zpracuj nové obrázky". Údaje o pacientovi odřízne, převede formát a zařadí snímek do aplikace.
 
 **Texty ručně:** všechny texty jsou v souboru `obsah.js` (na GitHubu ikona tužky).
 
 ### Jak se změny dostanou na web
 
-Web se aktualizuje automaticky po každém uložení změn na GitHub (do větve `main`):
+Aplikace má dva repozitáře. **Tento je soukromý:** je v něm zdroj, historie, pravidla a surové snímky. **Veřejný repozitář [pocus-jip](https://github.com/jirimatela/pocus-jip)** obsahuje jen hotový web. Web se aktualizuje automaticky po každém uložení změn sem (do větve `main`):
 
 1. **Kontrola (asi 5 minut).** GitHub aplikaci proklikne ve třech prohlížečích: Chrome/Edge, Safari a Firefox. V každém ji vyzkouší na telefonu, tabletu i počítači. Ověří, že se otevřou všechny oblasti, zobrazí se snímky a videa, kalkulačky počítají správně a stránka se na telefonu nerozpadá. Zkontroluje také formát, název a velikost souborů a bezpečnost (viz níže).
-2. **Zveřejnění.** Jen když kontrola projde. Když neprojde, nic se nezveřejní a sestrám zůstane online poslední funkční verze. U změny se na GitHubu objeví červený křížek a vlastník repozitáře dostane e-mail.
+2. **Zveřejnění.** Jen když kontrola projde, a jen soubory webu: aplikace a zpracované obrázky. Složka `nove-obrazky/`, historie ani pravidla se ven nedostanou. Když neprojde, nic se nezveřejní a sestrám zůstane online poslední funkční verze. U změny se na GitHubu objeví červený křížek a vlastník repozitáře dostane e-mail.
 
 Každá změna se ukládá jako nová verze a kteroukoli lze vrátit.
 
 ### Bezpečnost a soukromí
 
-**Web i repozitář jsou veřejné a všechno, co se jednou uloží, zůstane v historii.** Proto se citlivé údaje hlídají ještě *před* zveřejněním, a to dvakrát.
+**Web je veřejný a co se jednou zveřejní, zůstane ve veřejné historii.** Proto se citlivé údaje hlídají ještě *před* zveřejněním, a to dvakrát. Surové snímky zůstávají v tomto soukromém repozitáři.
 
 **Automatická kontrola** zastaví zveřejnění, když najde:
 - metadata ve fotkách a videích (např. GPS polohu z telefonu, datum, typ přístroje);
@@ -69,12 +69,13 @@ Každá změna se ukládá jako nová verze a kteroukoli lze vrátit.
 - nepřidá žádné sledování ani formuláře;
 - když něco citlivého unikne, okamžitě to ohlásí.
 
-**Text vepsaný přímo do obrazu stroj spolehlivě nerozpozná.** Proto: **z každého snímku před nahráním odřízněte lištu s údaji o pacientovi.**
+**Text vepsaný přímo do obrazu automatická kontrola nerozpozná.** Odříznutí hlavičky proto dělá agent pohledem na každý snímek. Když nahráváte snímky jinak než přes `nove-obrazky/`, odřízněte ji sami.
 
 ### Struktura
 
 - `obsah.js`: texty a seznam obrázků (mění se nejčastěji).
-- `obrazky/`: snímky a videa.
+- `obrazky/`: hotové snímky a videa (zveřejňují se).
+- `nove-obrazky/`: surové snímky ke zpracování (nezveřejňují se).
 - `index.html`, `app.js`, `styl.css`: vzhled a logika.
 - `test/kontrola.js`: automatická kontrola. Nejdřív `npm ci && npx playwright install chromium firefox webkit`, pak `node test/kontrola.js`.
-- `.github/workflows/`: kontrola a zveřejnění webu na GitHubu.
+- `.github/workflows/`: kontrola a přenos hotového webu do veřejného repozitáře.

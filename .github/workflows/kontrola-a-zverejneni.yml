@@ -1,6 +1,9 @@
-# Po každém uložení do main: plná kontrola ve třech prohlížečích (Chrome/Edge, Firefox, Safari)
-# na telefonu, tabletu i počítači. Web se zveřejní JEN když kontrola projde –
-# rozbitá verze se k sestrám nedostane, online zůstane poslední funkční.
+# Po každém uložení do main (v tomto SOUKROMÉM repozitáři):
+#   1. plná kontrola ve třech prohlížečích (Chrome/Edge, Firefox, Safari) na telefonu, tabletu i počítači,
+#      plus formáty, metadata a tajné údaje,
+#   2. JEN když projde: hotový web (index.html, app.js, obsah.js, styl.css, obrazky/) se přenese
+#      do VEŘEJNÉHO repozitáře, ze kterého běží GitHub Pages.
+# Nic jiného (složka nove-obrazky/, historie, pravidla, testy) se ven nedostane.
 name: Kontrola a zveřejnění
 
 on:
@@ -9,14 +12,12 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  # Veřejný repozitář s webem. Po převodu na jiný účet stačí změnit tady.
+  VEREJNY_REPO: jirimatela/pocus-jip
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
   kontrola:
@@ -37,20 +38,42 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: kontrola
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.nasazeni.outputs.page_url }}
+    concurrency:
+      group: zverejneni
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: zdroj
+
+      - name: Stáhnout veřejný repozitář
+        env:
+          KLIC: ${{ secrets.VEREJNY_REPO_KLIC }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$KLIC" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          git clone --depth 1 "git@github.com:${VEREJNY_REPO}.git" web
+
       - name: Připravit jen soubory webu
         run: |
-          mkdir _web
-          cp index.html app.js obsah.js styl.css _web/
-          cp -r obrazky _web/
-          rm -f _web/obrazky/README.md
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _web
-      - id: nasazeni
-        uses: actions/deploy-pages@v4
+          cd web && git rm -rq --ignore-unmatch . && cd ..
+          mkdir -p web/obrazky
+          cp zdroj/index.html zdroj/app.js zdroj/obsah.js zdroj/styl.css web/
+          cp -R zdroj/obrazky/. web/obrazky/
+          rm -f web/obrazky/README.md
+          # README veřejného repozitáře = část README o aplikaci (do první čáry ---)
+          awk '/^---$/ {exit} {print}' zdroj/README.md > web/README.md
+          printf '\n---\n\n*Tento repozitář obsahuje jen zveřejněnou verzi aplikace a aktualizuje se automaticky.*\n' >> web/README.md
+          touch web/.nojekyll
+
+      - name: Zveřejnit
+        run: |
+          cd web
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Web beze změn."; exit 0; fi
+          git commit -q -m "$(git -C ../zdroj log -1 --format=%s)"
+          git push origin HEAD:main
