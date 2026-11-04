@@ -46,6 +46,7 @@ jobs:
         run: |
           mkdir _web
           cp index.html app.js obsah.js styl.css _web/
+          cp -r knihovny _web/
           cp -r obrazky _web/
           rm -f _web/obrazky/README.md
       - uses: actions/configure-pages@v5

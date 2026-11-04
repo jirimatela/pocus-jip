@@ -13,6 +13,7 @@ Web běží na GitHub Pages. Po uložení do `main` spustí GitHub plnou kontrol
 | `index.html` | Rozvržení stránky, tělo (SVG) s klikacími oblastmi, kalkulačky | Nový orgán na těle, nová kalkulačka |
 | `app.js` | Logika (zobrazení, galerie, kalkulačky) | Jen když nová funkce nejde udělat v obsahu |
 | `styl.css` | Pár vlastních stylů navíc k Tailwindu | Zřídka |
+| `knihovny/` | Tailwind a ikony Lucide v pevné verzi | Neměnit |
 | `test/kontrola.js` | Automatická kontrola (prohlížeče, obrazovky, soubory) | Když přidáš novou funkci, přidej do ní kontrolu |
 | `test/ukazky/` | Malý testový obrázek a video pro kontrolu galerie | Neměnit |
 
@@ -126,4 +127,4 @@ Aplikaci otevírají sestry na čemkoli: nemocniční počítač s Windows (Edge
 
 ## Co aplikace nepotřebuje
 
-Žádný build, žádný framework. Tailwind a ikony se načítají z CDN v pevné verzi; nepřidávej je jinak, než jak jsou. `package.json` slouží jen ke kontrole (Playwright), web sám nic z npm nepoužívá.
+Žádný build, žádný framework. **Aplikace nic nestahuje z internetu:** Tailwind a ikony (Lucide) jsou v pevné verzi ve složce `knihovny/`, písmo je systémové. Nepřidávej odkazy na CDN, Google Fonts ani jiné cizí servery – kontrola je zablokuje a nahlásí jako chybu (a v prostředí agenta ani nemocniční síti by nefungovaly). `package.json` slouží jen ke kontrole (Playwright), web sám nic z npm nepoužívá.
