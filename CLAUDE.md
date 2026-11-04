@@ -51,6 +51,8 @@ Když autor napíše „zpracuj nové obrázky" (nebo nahraje soubory do `nove-o
 7. **Commit podle orgánu** (`Měchýř: …`). Do popisu commitu ani do názvu souboru nedávej nic z hlavičky (datum, ID).
 8. **Autorovi pošli přehled:** co jsi zpracoval, co jsi ořízl a co jsi naopak nezveřejnil a proč.
 
+Když autor píše, že video nejde nahrát: web GitHubu bere soubory do 25 MB. Poraď mu export MP4 z přístroje, nebo zmenšení v HandBrake (předvolba *Fast 720p30*) – viz `nove-obrazky/README.md`.
+
 Nástroje: když chybí `magick` nebo `ffmpeg`, nainstaluj je (`apt-get install -y imagemagick ffmpeg`, případně `pip install pillow imageio-ffmpeg`).
 
 ## Commity
