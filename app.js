@@ -156,7 +156,8 @@
             const aktivni = Number(b.dataset.index) === index;
             b.className = `${TLACITKO_ZAKLAD} ${aktivni ? barvaModulu(modul).aktivni : TLACITKO_NEAKTIVNI}`;
         });
-        $("gallery-desc").innerHTML = obrazek.popis || "";
+        $("gallery-desc").innerHTML = (obrazek.popis || "") +
+            (obrazek.zdroj ? `<span class="block mt-1 text-[11px] text-slate-500">Zdroj: ${escapeHtml(obrazek.zdroj)}</span>` : "");
 
         const plocha = $("gallery-display");
         plocha.innerHTML = `<span class="text-xs text-slate-500">Načítám…</span>`;
