@@ -8,7 +8,7 @@ Fotky a videa z iPhonu (`.heic`, `.mov`) se na počítačích s Windows nezobraz
 
 | Orgán | Názvy souborů |
 |---|---|
-| Žaludek | `gi-1-prazdny`, `gi-2-tekutina`, `gi-3-jidlo`, `gi-4-sonda` |
+| Žaludek | `gi-1-prazdny`, `gi-2-tekutina`, `gi-3-jidlo`, `gi-4-sonda`, `gi-5-video` |
 | Měchýř | `mechyr-1-pricny`, `mechyr-2-podelny`, `mechyr-3-balonek` |
 | Plíce | `plice-1-a-linie`, `plice-2-b-linie`, `plice-3-fluidothorax`, `plice-4-pneumothorax` |
 | DVT | `dvt-1-normalni`, `dvt-2-trombus` |
