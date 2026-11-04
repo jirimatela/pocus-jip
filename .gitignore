@@ -1,2 +1,10 @@
 node_modules/
 .DS_Store
+
+# Tajné a citlivé soubory – nikdy do veřejného repozitáře
+.env*
+*.pem
+*.key
+*.p12
+*.dcm
+DICOM/

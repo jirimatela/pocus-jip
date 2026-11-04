@@ -125,6 +125,54 @@ for (const f of souboryVeSlozce) {
 }
 if (!ffprobe) (PRISNE ? chyby : upozorneni).push("ffprobe (ffmpeg) není nainstalovaný – formát videí nebyl zkontrolován");
 
+/* ---------- Bezpečnost: metadata v obrázcích/videích, tajné údaje a rodná čísla v textech ---------- */
+
+// Fotky z telefonu nesou EXIF (GPS poloha, datum, zařízení) – web je veřejný.
+for (const f of souboryVeSlozce) {
+    const pripona = f.slice(f.lastIndexOf(".") + 1).toLowerCase();
+    const cesta = path.join(SLOZKA, f);
+    if (PRIPONY_OBRAZEK.includes(pripona)) {
+        const zacatek = fs.readFileSync(cesta).subarray(0, 256 * 1024);
+        if (zacatek.includes(Buffer.from("Exif\0")) || zacatek.includes(Buffer.from("eXIf")) || zacatek.includes(Buffer.from("<x:xmpmeta")))
+            chyby.push(`${OBSAH.slozkaObrazku}/${f}: obsahuje metadata (EXIF/XMP – může v nich být GPS poloha, datum, přístroj) – odstraňte: magick ${f} -strip ${f}`);
+    }
+    if (PRIPONY_VIDEO.includes(pripona) && ffprobe) {
+        try {
+            const tagy = execFileSync("ffprobe", ["-v", "error", "-show_entries", "format_tags", "-of", "default=nw=1", cesta], { encoding: "utf8" });
+            if (/location|gps|make|model|author|artist|comment/i.test(tagy))
+                chyby.push(`${OBSAH.slozkaObrazku}/${f}: video obsahuje metadata (poloha/přístroj/autor) – odstraňte: ffmpeg -i ${f} -map_metadata -1 -c copy nove.${pripona}`);
+        } catch { /* nečitelné video hlásí kontrola formátu výše */ }
+    }
+}
+
+// Tajné údaje a osobní údaje v textových souborech repozitáře
+const TAJNE = [
+    [/-----BEGIN [A-Z ]*PRIVATE KEY-----/, "soukromý klíč"],
+    [/\b(ghp|gho|ghs|github_pat)_[A-Za-z0-9_]{20,}/, "token GitHubu"],
+    [/\bsk-[A-Za-z0-9_-]{20,}/, "API klíč"],
+    [/\bAKIA[0-9A-Z]{16}\b/, "klíč AWS"],
+    [/\b(password|heslo|passwd|api[_-]?key|secret|token)\s*[:=]\s*["']?[^\s"']{6,}/i, "heslo nebo klíč"],
+    [/\b\d{2}[0156]\d[0-3]\d\s?\/\s?\d{3,4}\b/, "rodné číslo"]
+];
+function textoveSoubory(adr) {
+    return fs.readdirSync(adr, { withFileTypes: true }).flatMap(e => {
+        if ([".git", "node_modules", "ukazky"].includes(e.name)) return [];
+        const p = path.join(adr, e.name);
+        if (e.isDirectory()) return textoveSoubory(p);
+        return /\.(html|js|css|md|json|yml|yaml|txt|csv)$/i.test(e.name) && p !== __filename ? [p] : [];
+    });
+}
+for (const soubor of textoveSoubory(KOREN)) {
+    const text = fs.readFileSync(soubor, "utf8");
+    for (const [vzor, co] of TAJNE) {
+        if (vzor.test(text)) chyby.push(`${path.relative(KOREN, soubor)}: vypadá to na ${co} – do veřejného repozitáře nepatří, odstraňte`);
+    }
+}
+for (const f of fs.readdirSync(KOREN)) {
+    if (/^\.env|\.(pem|key|p12|dcm)$/i.test(f)) chyby.push(`${f}: tajný soubor nebo DICOM nepatří do repozitáře`);
+}
+
+
 /* ======================= 2) Lokální server jako GitHub Pages ======================= */
 // Rozlišuje velká a malá písmena (Mac ani Windows ne, GitHub Pages ano).
 // Navíc servíruje testovací ukázky na /obrazky/__test__/… (aby se galerie dala ověřit i bez skutečných snímků).
