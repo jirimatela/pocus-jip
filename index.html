@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs" class="h-full bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>POCUS v Intenzivní Péči – Průvodce pro Sestry</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="styl.css">
+    <script src="obsah.js"></script>
+    <script src="app.js"></script>
+</head>
+<body class="h-full flex flex-col min-h-screen">
+
+    <!-- Hlavička -->
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 shrink-0 rounded-xl bg-gradient-to-tr from-cyan-600 to-sky-400 flex items-center justify-center shadow-lg shadow-cyan-950/50">
+                    <i data-lucide="activity" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white flex flex-wrap items-center gap-2">
+                        <span>POCUS v Intenzivní Péči</span>
+                        <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">ARO / JIP</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Ošetřovatelské výkony prováděné pod kontrolou ultrazvuku</p>
+                </div>
+            </div>
+            <button id="btn-overview" type="button" class="shrink-0 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center space-x-1.5">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Přehled těla</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col lg:flex-row gap-6 items-stretch">
+
+        <!-- LEVÝ SLOUPEC: tělo -->
+        <div class="lg:w-5/12 bg-slate-900/80 rounded-3xl border border-slate-800/90 p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden shadow-2xl min-h-[520px]">
+
+            <div class="flex items-center justify-between z-20 gap-2">
+                <div class="bg-slate-950/80 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300 flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                    <span class="font-medium">Klikněte na oblast na těle nebo tlačítko</span>
+                </div>
+                <div id="module-count" class="text-xs text-slate-500 font-mono"></div>
+            </div>
+
+            <!-- Tělo. Každá klikací oblast má data-modul = klíč modulu z obsah.js -->
+            <div class="relative w-full h-full flex items-center justify-center my-auto py-4">
+                <svg viewBox="0 0 300 700" class="h-[440px] w-auto filter drop-shadow-[0_0_20px_rgba(14,165,233,0.15)]">
+                    <defs>
+                        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1e293b" />
+                            <stop offset="100%" stop-color="#020617" />
+                        </linearGradient>
+                    </defs>
+
+                    <g fill="url(#bodyGrad)" stroke="#334155" stroke-width="2.5">
+                        <path d="M 150 30 C 130 30 120 45 120 70 C 120 95 130 105 138 115 L 140 130 L 160 130 L 162 115 C 170 105 180 95 180 70 C 180 45 170 30 150 30 Z" />
+                        <path d="M 140 130 C 110 135 80 155 65 185 C 55 205 45 270 40 330 C 38 350 48 355 55 350 C 62 345 70 290 75 260 L 85 260 L 85 410 C 85 440 110 450 150 450 C 190 450 215 440 215 410 L 215 260 L 225 260 C 230 290 238 345 245 350 C 252 355 262 350 260 330 C 255 270 245 205 235 185 C 220 155 190 135 160 130 Z" />
+                        <path d="M 90 445 L 95 570 L 100 660 C 100 675 120 675 125 660 L 140 550 L 145 448 Z" />
+                        <path d="M 210 445 L 205 570 L 200 660 C 200 675 180 675 175 660 L 160 550 L 155 448 Z" />
+                    </g>
+
+                    <!-- Plíce -->
+                    <g class="cursor-pointer group" data-modul="lungs">
+                        <path d="M 100 165 C 100 150 130 150 135 165 L 135 235 C 120 245 100 230 100 200 Z" class="fill-cyan-500/20 group-hover:fill-cyan-400/40 stroke-cyan-400 stroke-2 transition-all" />
+                        <path d="M 200 165 C 200 150 170 150 165 165 L 165 235 C 180 245 200 230 200 200 Z" class="fill-cyan-500/20 group-hover:fill-cyan-400/40 stroke-cyan-400 stroke-2 transition-all" />
+                        <circle cx="118" cy="195" r="9" class="fill-cyan-400/40 pulse-hotspot" />
+                        <circle cx="118" cy="195" r="4" class="fill-cyan-300" />
+                    </g>
+
+                    <!-- Žaludek -->
+                    <g class="cursor-pointer group" data-modul="gi">
+                        <ellipse cx="150" cy="275" rx="28" ry="20" class="fill-amber-500/25 group-hover:fill-amber-400/45 stroke-amber-400 stroke-2 transition-all" />
+                        <circle cx="150" cy="275" r="10" class="fill-amber-400/40 pulse-hotspot" />
+                        <circle cx="150" cy="275" r="4.5" class="fill-amber-300" />
+                    </g>
+
+                    <!-- Periferní žíly (paže) -->
+                    <g class="cursor-pointer group" data-modul="piv">
+                        <rect x="50" y="270" width="24" height="65" rx="12" class="fill-emerald-500/25 group-hover:fill-emerald-400/45 stroke-emerald-400 stroke-2 transition-all" />
+                        <circle cx="62" cy="302" r="9" class="fill-emerald-400/40 pulse-hotspot" />
+                        <circle cx="62" cy="302" r="4" class="fill-emerald-300" />
+                    </g>
+
+                    <!-- Močový měchýř -->
+                    <g class="cursor-pointer group" data-modul="bladder">
+                        <circle cx="150" cy="415" r="24" class="fill-purple-500/25 group-hover:fill-purple-400/45 stroke-purple-400 stroke-2 transition-all" />
+                        <circle cx="150" cy="415" r="10" class="fill-purple-400/40 pulse-hotspot" />
+                        <circle cx="150" cy="415" r="4.5" class="fill-purple-300" />
+                    </g>
+
+                    <!-- DVT (dolní končetiny) -->
+                    <g class="cursor-pointer group" data-modul="dvt">
+                        <rect x="98" y="465" width="28" height="150" rx="12" class="fill-rose-500/25 group-hover:fill-rose-400/45 stroke-rose-400 stroke-2 transition-all" />
+                        <rect x="174" y="465" width="28" height="150" rx="12" class="fill-rose-500/25 group-hover:fill-rose-400/45 stroke-rose-400 stroke-2 transition-all" />
+                        <circle cx="112" cy="495" r="8" class="fill-rose-400/40 pulse-hotspot" />
+                        <circle cx="112" cy="495" r="4" class="fill-rose-300" />
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Rychlá tlačítka (vytváří app.js z obsah.js) -->
+            <div id="quick-buttons" class="grid gap-1.5 z-20 pt-2 border-t border-slate-800"></div>
+        </div>
+
+        <!-- PRAVÝ SLOUPEC: detail -->
+        <div class="lg:w-7/12 bg-slate-900/90 rounded-3xl border border-slate-800 p-5 sm:p-7 flex flex-col justify-between shadow-2xl min-h-[520px]">
+
+            <div id="view-welcome" class="h-full flex flex-col items-center justify-center text-center p-6 space-y-4 my-auto">
+                <div class="w-16 h-16 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center">
+                    <i data-lucide="scan" class="w-8 h-8 animate-pulse"></i>
+                </div>
+                <div class="max-w-md space-y-2">
+                    <h2 class="text-xl font-bold text-white">Vyberte vyšetřovanou oblast</h2>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Kliknutím na tělo vlevo nebo na odpovídající tlačítka zobrazíte klinický postup pro sestry, doporučenou sondu a ultrazvukové náhledy.
+                    </p>
+                </div>
+            </div>
+
+            <div id="view-detail" class="hidden">
+
+                <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-4">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                            Ošetřovatelský Výkon
+                        </span>
+                        <h2 id="module-title" class="text-xl sm:text-2xl font-bold text-white mt-1"></h2>
+                    </div>
+                    <div class="shrink-0 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300 flex items-center space-x-1.5">
+                        <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+                        <span id="module-probe"></span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 mb-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2 flex items-center space-x-1.5">
+                        <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                        <span>Klinický postup pro sestry</span>
+                    </h3>
+                    <ul id="module-protocol" class="space-y-2 text-xs sm:text-sm text-slate-300"></ul>
+                </div>
+
+                <div class="bg-rose-500/10 border border-rose-500/30 p-4 rounded-2xl flex items-start space-x-3 mb-4">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-rose-400 mb-1">Varovný nález / Důležité upozornění</h4>
+                        <p id="module-warning" class="text-xs sm:text-sm text-rose-200"></p>
+                    </div>
+                </div>
+
+                <!-- Galerie obrázků (obsah z obsah.js, soubory ze složky obrazky/) -->
+                <div id="gallery-section" class="hidden bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3 mb-4">
+                    <h4 id="gallery-title" class="text-xs font-bold uppercase tracking-wider flex items-center space-x-1.5">
+                        <i data-lucide="camera" class="w-4 h-4"></i>
+                        <span id="gallery-title-text"></span>
+                    </h4>
+                    <div id="gallery-buttons" class="grid gap-2 grid-cols-2"></div>
+                    <div id="gallery-display" class="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center p-2"></div>
+                    <p id="gallery-desc" class="text-xs text-slate-300 bg-slate-900 p-2.5 rounded-xl border border-slate-800"></p>
+                </div>
+
+                <!-- Kalkulačka GRV (modul s kalkulacka: "grv") -->
+                <div data-kalkulacka="grv" class="hidden bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center space-x-1.5">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                        <span>Kalkulačka Gastrického Rezidua (GRV)</span>
+                    </h4>
+                    <p class="text-xs text-slate-400">Vzorec: Objem (ml) = 27 + (14.6 × CSA v cm²) - (1.28 × věk)</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="text-xs text-slate-300">Plocha CSA (cm²):
+                            <input type="number" id="input-csa" value="4.5" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        </label>
+                        <label class="text-xs text-slate-300">Věk pacienta (roky):
+                            <input type="number" id="input-age" value="65" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        </label>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">
+                        <span class="text-xs text-slate-400 block">Vypočítaný reziduální objem:</span>
+                        <span id="res-grv" class="text-lg font-bold text-amber-400"></span>
+                    </div>
+                </div>
+
+                <!-- Kalkulačka objemu měchýře (modul s kalkulacka: "mechyr") -->
+                <div data-kalkulacka="mechyr" class="hidden bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center space-x-1.5">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                        <span>Kalkulačka Objemu Močového Měchýře</span>
+                    </h4>
+                    <p class="text-xs text-slate-400">Vzorec: Objem (ml) = Šířka × Výška × Hloubka × 0.52</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="text-xs text-slate-300">Šířka (cm):
+                            <input type="number" id="b-w" value="6.0" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                        </label>
+                        <label class="text-xs text-slate-300">Výška (cm):
+                            <input type="number" id="b-h" value="7.0" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                        </label>
+                        <label class="text-xs text-slate-300">Hloubka (cm):
+                            <input type="number" id="b-d" value="5.0" step="0.1" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                        </label>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">
+                        <span class="text-xs text-slate-400 block">Vypočítaný objem moče:</span>
+                        <span id="res-bladder" class="text-lg font-bold text-purple-400"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Zvětšený obrázek -->
+    <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out">
+        <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg">
+    </div>
+
+</body>
+</html>
