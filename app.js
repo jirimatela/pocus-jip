@@ -234,8 +234,16 @@
         $("module-count").innerText = `${klice.length} výkonů`;
     }
 
+    function vykresliUpozorneni() {
+        const u = OBSAH.upozorneni;
+        if (!u) return;
+        $("disclaimer-kratce").innerHTML = u.kratce || "";
+        $("disclaimer-podrobne").innerHTML = (u.podrobne || []).map(t => `<li>${t}</li>`).join("");
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         vykresliRychlaTlacitka();
+        vykresliUpozorneni();
 
         // Kliknutí na tělo (SVG) i na rychlá tlačítka: oba mají data-modul.
         document.addEventListener("click", e => {

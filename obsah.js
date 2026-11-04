@@ -12,6 +12,19 @@
 window.POCUS = {
     slozkaObrazku: "obrazky",
 
+    // Upozornění v patičce aplikace. První řádek je vidět vždy, zbytek po rozkliknutí „Více".
+    upozorneni: {
+        kratce: "Výuková pomůcka. Nenahrazuje odborné školení, klinický úsudek ani standardy vašeho pracoviště.",
+        podrobne: [
+            "Aplikace slouží k výuce a opakování. Není to zdravotnický prostředek a není určena k rozhodování o diagnóze nebo léčbě konkrétního pacienta.",
+            "Ultrazvukové výkony provádějte jen v rozsahu své kvalifikace, po odpovídajícím zaškolení a podle standardů a pokynů svého pracoviště. Při jakékoli pochybnosti nebo varovném nálezu informujte lékaře.",
+            "Kalkulačky dávají orientační hodnoty pro výuku. Vzorce mají omezenou platnost (např. odhad gastrického rezidua platí pro dospělé a měření v poloze na pravém boku).",
+            "Ukázkové snímky jsou anonymizované a ilustrační; nález u konkrétního pacienta může vypadat jinak.",
+            "Aplikace neukládá ani neodesílá nic z toho, co do ní zadáte. Výpočty probíhají jen ve vašem prohlížeči.",
+            "Obsah je sestaven s péčí, ale autoři nenesou odpovědnost za jeho použití v klinické praxi."
+        ]
+    },
+
     moduly: {
         gi: {
             title: "Trávicí trakt / Výživa",

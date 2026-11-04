@@ -61,6 +61,8 @@ if (!OBSAH || !OBSAH.moduly) {
     process.exit(1);
 }
 const KLICE = Object.keys(OBSAH.moduly);
+if (!OBSAH.upozorneni || !OBSAH.upozorneni.kratce || !(OBSAH.upozorneni.podrobne || []).length)
+    chyby.push("obsah.js: chybí upozornění (upozorneni.kratce a upozorneni.podrobne) – aplikace ho musí zobrazovat");
 const SLOZKA = path.join(KOREN, OBSAH.slozkaObrazku);
 const souboryVeSlozce = fs.existsSync(SLOZKA) ? fs.readdirSync(SLOZKA) : [];
 const pouzite = new Set();
@@ -272,6 +274,9 @@ async function zkontrolujStranku({ prohlizec, obrazovka, url, sUkazkami }) {
     await page.waitForFunction(() => document.querySelectorAll("#quick-buttons svg").length > 0, null, { timeout: 10000 }).catch(() => {});
     const spatneIkony = await page.$$eval("#quick-buttons i[data-lucide]", els => els.map(e => e.dataset.lucide));
     for (const ik of spatneIkony) chyba(`ikona "${ik}" neexistuje (názvy viz lucide.dev/icons)`);
+
+    const upozorneniText = (await page.textContent("#disclaimer-kratce") || "").trim();
+    if (!upozorneniText || !(await page.isVisible("#disclaimer-kratce"))) chyba("upozornění v patičce se nezobrazilo");
 
     const vodorovnyPosun = async kde => {
         const [sirka, okno] = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);

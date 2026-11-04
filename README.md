@@ -23,7 +23,7 @@ U každé oblasti je:
 - **Ukázkové sonogramy a videa** z praxe. Kliknutím se snímek zvětší přes celou obrazovku.
 - **Kalkulačka** tam, kde se něco měří (desetinná čísla lze psát s čárkou).
 
-> Aplikace slouží k výuce. Nenahrazuje klinický úsudek ani místní standardy pracoviště.
+> **Upozornění:** Aplikace je výuková pomůcka, ne zdravotnický prostředek. Nenahrazuje odborné školení, klinický úsudek ani standardy pracoviště a není určena k rozhodování o konkrétním pacientovi. Kalkulačky dávají orientační hodnoty pro výuku. Ukázkové snímky jsou anonymizované. Aplikace neukládá ani neodesílá žádná zadaná data. Plné znění je v patičce aplikace.
 
 ---
 

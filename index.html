@@ -172,6 +172,7 @@
                         <span>Kalkulačka Gastrického Rezidua (GRV)</span>
                     </h4>
                     <p class="text-xs text-slate-400">Vzorec: Objem (ml) = 27 + (14.6 × CSA v cm²) - (1.28 × věk)</p>
+                    <p class="text-[11px] text-slate-500">Orientační výpočet pro výuku – nerozhoduje o léčbě konkrétního pacienta.</p>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="text-xs text-slate-300">Plocha CSA (cm²):
                             <input type="text" inputmode="decimal" id="input-csa" value="4,5" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white focus:outline-none focus:border-cyan-500">
@@ -193,6 +194,7 @@
                         <span>Kalkulačka Objemu Močového Měchýře</span>
                     </h4>
                     <p class="text-xs text-slate-400">Vzorec: Objem (ml) = Šířka × Výška × Hloubka × 0.52</p>
+                    <p class="text-[11px] text-slate-500">Orientační výpočet pro výuku – nerozhoduje o léčbě konkrétního pacienta.</p>
                     <div class="grid grid-cols-3 gap-2">
                         <label class="text-xs text-slate-300">Šířka (cm):
                             <input type="text" inputmode="decimal" id="b-w" value="6,0" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl p-2 text-base text-white">
@@ -213,6 +215,20 @@
             </div>
         </div>
     </main>
+
+    <!-- Upozornění (text v obsah.js → upozorneni) -->
+    <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 pb-6">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 text-xs text-slate-400 flex items-start space-x-3">
+            <i data-lucide="info" class="w-4 h-4 text-slate-500 shrink-0 mt-0.5"></i>
+            <div class="space-y-2">
+                <p id="disclaimer-kratce" class="text-slate-300"></p>
+                <details>
+                    <summary class="cursor-pointer text-cyan-400 select-none py-2 min-h-[40px]">Více o použití aplikace</summary>
+                    <ul id="disclaimer-podrobne" class="mt-2 space-y-1.5 list-disc pl-4"></ul>
+                </details>
+            </div>
+        </div>
+    </footer>
 
     <!-- Zvětšený obrázek -->
     <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out">
