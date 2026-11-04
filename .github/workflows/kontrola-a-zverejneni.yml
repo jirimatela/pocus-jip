@@ -50,11 +50,15 @@ jobs:
         env:
           KLIC: ${{ secrets.VEREJNY_REPO_KLIC }}
         run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "$KLIC" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          if [ -z "$KLIC" ]; then echo "::error::Chybí tajná hodnota VEREJNY_REPO_KLIC"; exit 1; fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KLIC" | tr -d '\r' > ~/.ssh/verejny_repo
+          chmod 600 ~/.ssh/verejny_repo
+          # Otisk veřejné části (není tajný) – musí odpovídat deploy klíči ve veřejném repozitáři
+          ssh-keygen -y -f ~/.ssh/verejny_repo | ssh-keygen -lf - || { echo "::error::Klíč VEREJNY_REPO_KLIC není platný soukromý klíč"; exit 1; }
           ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
-          git clone --depth 1 "git@github.com:${VEREJNY_REPO}.git" web
+          echo "GIT_SSH_COMMAND=ssh -i $HOME/.ssh/verejny_repo -o IdentitiesOnly=yes" >> "$GITHUB_ENV"
+          GIT_SSH_COMMAND="ssh -i $HOME/.ssh/verejny_repo -o IdentitiesOnly=yes" git clone --depth 1 "git@github.com:${VEREJNY_REPO}.git" web
 
       - name: Připravit jen soubory webu
         run: |
