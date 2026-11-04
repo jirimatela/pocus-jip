@@ -2,7 +2,7 @@
 
 **Interaktivní průvodce ultrazvukem u lůžka pro ošetřovatelskou praxi na ARO a JIP.**
 
-👉 **Aplikace: [jirimatela.github.io/pocus-jip](https://jirimatela.github.io/pocus-jip/)**
+👉 **Aplikace: [mazur-andrej.github.io/pocus-jip](https://mazur-andrej.github.io/pocus-jip/)**
 
 **POCUS** (*Point-of-Care Ultrasound*, ultrazvuk u lůžka) je vyšetření, které provádí přímo ošetřující tým, aby rychle odpověděl na konkrétní otázku: je katétr v měchýři, je v žaludku reziduum, klouže pleura? Aplikace doprovází workshop o ošetřovatelských výkonech pod kontrolou ultrazvuku. Sestra klikne na oblast na schématu těla a uvidí, jak výkon provést, na co si dát pozor a jak vypadá normální a patologický ultrazvukový nález. Funguje na počítači, tabletu i telefonu, bez instalace a bez přihlášení.
 
@@ -45,7 +45,7 @@ Agent se řídí pravidly v `CLAUDE.md`: mění jen to, co je potřeba, a před 
 
 ### Jak se změny dostanou na web
 
-Aplikace má dva repozitáře. **Tento je soukromý:** je v něm zdroj, historie, pravidla a surové snímky. **Veřejný repozitář [pocus-jip](https://github.com/jirimatela/pocus-jip)** obsahuje jen hotový web. Web se aktualizuje automaticky po každém uložení změn sem (do větve `main`):
+Aplikace má dva repozitáře. **Tento je soukromý:** je v něm zdroj, historie, pravidla a surové snímky. **Veřejný repozitář [pocus-jip](https://github.com/mazur-andrej/pocus-jip)** obsahuje jen hotový web. Web se aktualizuje automaticky po každém uložení změn sem (do větve `main`):
 
 1. **Kontrola (asi 5 minut).** GitHub aplikaci proklikne ve třech prohlížečích: Chrome/Edge, Safari a Firefox. V každém ji vyzkouší na telefonu, tabletu i počítači. Ověří, že se otevřou všechny oblasti, zobrazí se snímky a videa, kalkulačky počítají správně a stránka se na telefonu nerozpadá. Zkontroluje také formát, název a velikost souborů a bezpečnost (viz níže).
 2. **Zveřejnění.** Jen když kontrola projde, a jen soubory webu: aplikace a zpracované obrázky. Složka `nove-obrazky/`, historie ani pravidla se ven nedostanou. Když neprojde, nic se nezveřejní a sestrám zůstane online poslední funkční verze. U změny se na GitHubu objeví červený křížek a vlastník repozitáře dostane e-mail.

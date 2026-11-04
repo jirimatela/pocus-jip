@@ -13,8 +13,9 @@ on:
   workflow_dispatch:
 
 env:
-  # Veřejný repozitář s webem. Po převodu na jiný účet stačí změnit tady.
-  VEREJNY_REPO: jirimatela/pocus-jip
+  # Veřejný repozitář s webem: pocus-jip u stejného vlastníka jako tento repozitář
+  # (po převodu na jiný účet se změní sám).
+  VEREJNY_REPO: ${{ github.repository_owner }}/pocus-jip
 
 permissions:
   contents: read
