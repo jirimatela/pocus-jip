@@ -2,7 +2,7 @@
 
 **Interaktivní průvodce ultrazvukem u lůžka pro ošetřovatelskou praxi na ARO a JIP.**
 
-👉 **Aplikace: [mazur-andrej.github.io/pocus-jip](https://mazur-andrej.github.io/pocus-jip/)**
+👉 **Aplikace: [jirimatela.github.io/pocus-jip](https://jirimatela.github.io/pocus-jip/)**
 
 **POCUS** (*Point-of-Care Ultrasound*, ultrazvuk u lůžka) je vyšetření, které provádí přímo ošetřující tým, aby rychle odpověděl na konkrétní otázku: je katétr v měchýři, je v žaludku reziduum, klouže pleura? Aplikace doprovází workshop o ošetřovatelských výkonech pod kontrolou ultrazvuku. Sestra klikne na oblast na schématu těla a uvidí, jak výkon provést, na co si dát pozor a jak vypadá normální a patologický ultrazvukový nález. Funguje na počítači, tabletu i telefonu, bez instalace a bez přihlášení.
 
@@ -39,22 +39,22 @@ U každé oblasti je:
 
 Agent se řídí pravidly v `CLAUDE.md`: mění jen to, co je potřeba, a před uložením aplikaci vyzkouší. Po uložení ji GitHub ještě jednou proklikne v Chrome, Safari a Firefoxu na telefonu, tabletu i počítači. Web se aktualizuje za pár minut, a jen když je všechno v pořádku. Jinak zůstane online poslední funkční verze.
 
-**Nové obrázky:** na GitHubu otevřete složku [`nove-obrazky`](nove-obrazky/) → *Add file* → *Upload files* a soubory přetáhněte tak, jak jsou, i s hlavičkou přístroje. Tento repozitář je soukromý a složka se nezveřejňuje. Pak agentovi napište „zpracuj nové obrázky". Údaje o pacientovi odřízne, převede formát a zařadí snímek do aplikace.
+**Nové obrázky a videa:** pošlete je agentovi jako přílohu v chatu a napište, co na nich je (např. „tohle je žaludek s tekutinou"). Klidně i s hlavičkou přístroje: agent odřízne údaje o pacientovi a pracovišti, odstraní skrytá metadata, převede formát a snímek zařadí do aplikace. Originály se do repozitáře neukládají, jen hotové snímky. Velké video z přístroje nejdřív exportujte jako MP4, nebo ho zmenšete v programu [HandBrake](https://handbrake.fr) (předvolba *Fast 720p30*).
 
 **Texty ručně:** všechny texty jsou v souboru `obsah.js` (na GitHubu ikona tužky).
 
 ### Jak se změny dostanou na web
 
-Aplikace má dva repozitáře. **Tento je soukromý:** je v něm zdroj, historie, pravidla a surové snímky. **Veřejný repozitář [pocus-jip](https://github.com/mazur-andrej/pocus-jip)** obsahuje jen hotový web. Web se aktualizuje automaticky po každém uložení změn sem (do větve `main`):
+Web se aktualizuje automaticky po každém uložení změn na GitHub (do větve `main`):
 
 1. **Kontrola (asi 5 minut).** GitHub aplikaci proklikne ve třech prohlížečích: Chrome/Edge, Safari a Firefox. V každém ji vyzkouší na telefonu, tabletu i počítači. Ověří, že se otevřou všechny oblasti, zobrazí se snímky a videa, kalkulačky počítají správně a stránka se na telefonu nerozpadá. Zkontroluje také formát, název a velikost souborů a bezpečnost (viz níže).
-2. **Zveřejnění.** Jen když kontrola projde, a jen soubory webu: aplikace a zpracované obrázky. Složka `nove-obrazky/`, historie ani pravidla se ven nedostanou. Když neprojde, nic se nezveřejní a sestrám zůstane online poslední funkční verze. U změny se na GitHubu objeví červený křížek a vlastník repozitáře dostane e-mail.
+2. **Zveřejnění.** Jen když kontrola projde. Když neprojde, nic se nezveřejní a sestrám zůstane online poslední funkční verze. U změny se na GitHubu objeví červený křížek a vlastník repozitáře dostane e-mail.
 
 Každá změna se ukládá jako nová verze a kteroukoli lze vrátit.
 
 ### Bezpečnost a soukromí
 
-**Web je veřejný a co se jednou zveřejní, zůstane ve veřejné historii.** Proto se citlivé údaje hlídají ještě *před* zveřejněním, a to dvakrát. Surové snímky zůstávají v tomto soukromém repozitáři.
+**Web i repozitář jsou veřejné a všechno, co se jednou uloží, zůstane v historii.** Proto se citlivé údaje hlídají ještě *před* zveřejněním, a to dvakrát.
 
 **Automatická kontrola** zastaví zveřejnění, když najde:
 - metadata ve fotkách a videích (např. GPS polohu z telefonu, datum, typ přístroje);
@@ -69,13 +69,12 @@ Každá změna se ukládá jako nová verze a kteroukoli lze vrátit.
 - nepřidá žádné sledování ani formuláře;
 - když něco citlivého unikne, okamžitě to ohlásí.
 
-**Text vepsaný přímo do obrazu automatická kontrola nerozpozná.** Odříznutí hlavičky proto dělá agent pohledem na každý snímek. Když nahráváte snímky jinak než přes `nove-obrazky/`, odřízněte ji sami.
+**Text vepsaný přímo do obrazu automatická kontrola nerozpozná.** Hlavičku s údaji proto odřezává agent, který si každý snímek prohlédne. Za obsah aplikace ale odpovídá autor. Výsledek si vždy prohlédněte.
 
 ### Struktura
 
 - `obsah.js`: texty a seznam obrázků (mění se nejčastěji).
-- `obrazky/`: hotové snímky a videa (zveřejňují se).
-- `nove-obrazky/`: surové snímky ke zpracování (nezveřejňují se).
+- `obrazky/`: snímky a videa.
 - `index.html`, `app.js`, `styl.css`: vzhled a logika.
 - `test/kontrola.js`: automatická kontrola. Nejdřív `npm ci && npx playwright install chromium firefox webkit`, pak `node test/kontrola.js`.
-- `.github/workflows/`: kontrola a přenos hotového webu do veřejného repozitáře.
+- `.github/workflows/`: kontrola a zveřejnění webu na GitHubu.

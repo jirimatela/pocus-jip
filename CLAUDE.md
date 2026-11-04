@@ -2,19 +2,14 @@
 
 Výuková webová aplikace pro zdravotní sestry na JIP (ultrazvuk u lůžka). Autor obsahu je lékař, ne programátor: píše česky a krátce („přidej obrázek", „změň text u plic"). Odpovídej česky a jednoduše, bez programátorských termínů.
 
-**Dva repozitáře:**
-- **Tento repozitář je soukromý** – autorova pracovna: zdroj aplikace, pravidla, kontrola, historie a složka `nove-obrazky/` na surové snímky.
-- **Veřejný repozitář** (`VEREJNY_REPO` v `.github/workflows/kontrola-a-zverejneni.yml`) obsahuje jen hotový web a běží z něj GitHub Pages. Do veřejného repozitáře nikdy nic neposílej ručně.
-
-Po uložení do `main` spustí GitHub plnou kontrolu a **jen když projde**, přenese do veřejného repozitáře `index.html`, `app.js`, `obsah.js`, `styl.css` a `obrazky/`. Jinak zůstane online poslední funkční verze. **Všechno v těchto souborech je tedy veřejné** – soukromí repozitáře chrání jen to, co zůstane mimo ně.
+Web běží na GitHub Pages. Po uložení do `main` spustí GitHub plnou kontrolu (`.github/workflows/kontrola-a-zverejneni.yml`) a **web zveřejní jen když projde** – jinak zůstane online poslední funkční verze. Repozitář i web jsou veřejné.
 
 ## Soubory
 
 | Soubor | Co v něm je | Kdy ho měnit |
 |---|---|---|
 | `obsah.js` | Všechny texty, tlačítka, seznam obrázků u každého orgánu | Skoro vždy – většina požadavků je jen tady |
-| `obrazky/` | Hotové, anonymizované obrázky a videa (jpg, png, webp, gif, mp4, webm) – **zveřejňují se** | Jen zpracované snímky z `nove-obrazky/` |
-| `nove-obrazky/` | Surové snímky od autora, jak je nahrál – **nezveřejňují se** | Zpracuj a vyprázdni (viz níže) |
+| `obrazky/` | Hotové, anonymizované obrázky a videa (jpg, png, webp, gif, mp4, webm) | Nové snímky – jen po zpracování (viz níže) |
 | `index.html` | Rozvržení stránky, tělo (SVG) s klikacími oblastmi, kalkulačky | Nový orgán na těle, nová kalkulačka |
 | `app.js` | Logika (zobrazení, galerie, kalkulačky) | Jen když nová funkce nejde udělat v obsahu |
 | `styl.css` | Pár vlastních stylů navíc k Tailwindu | Zřídka |
@@ -38,20 +33,23 @@ Po uložení do `main` spustí GitHub plnou kontrolu a **jen když projde**, př
 8. **Ukládání:** ukládej rovnou do `main` (viz „Commity" níže). Autorovi napiš jednou větou, co se změnilo, a že web se aktualizuje za pár minut (po kontrole na GitHubu).
 9. **Vrácení změny:** když autor napíše „vrať to", použij `git revert` na příslušný commit (historii nepřepisuj).
 
-## Zpracování nových obrázků
+## Nové obrázky a videa
 
-Když autor napíše „zpracuj nové obrázky" (nebo nahraje soubory do `nove-obrazky/`), postupuj u **každého** souboru takto:
+Autor je posílá **jako přílohu v chatu** a napíše, co na nich je („tohle je žaludek s tekutinou, tohle B-linie k plicím"). U **každého** souboru postupuj takto:
 
-1. **Prohlédni ho** (u videa první, prostřední a poslední snímek: `ffmpeg -i x -vf "select='eq(n\,0)+eq(n\,N/2)+eq(n\,N-1)',tile=3x1" -frames:v 1 nahled.png`). Najdi vpisovaný text: jméno, ID, rodné číslo, datum a čas, nemocnici, oddělení.
-2. **Ořízni hlavičku a vše s údaji** (`magick x.png -crop ŠxV+X+Y +repage y.png`, u videa `-vf crop=Š:V:X:Y`). Hloubkovou stupnici a technické parametry přístroje můžeš nechat. Výsledek si znovu prohlédni.
-3. **Odstraň metadata a převeď formát:** obrázky `-strip`, delší strana max. 1600 px; video `ffmpeg … -c:v libx264 -crf 26 -pix_fmt yuv420p -movflags +faststart -an -map_metadata -1 x.mp4`, šířka max. 1280 px, max. 10 MB (jinak zkrať a řekni autorovi).
-4. **Je to autorův snímek?** Vodoznak cizího webu (např. „POCUS 101"), popisky z článku nebo ikona prohlížeče v rohu znamenají snímek z internetu. Takový nezveřejňuj a zeptej se autora na licenci (viz „Cizí obsah").
-5. **Pojmenuj** podle pravidla 3 a ulož do `obrazky/`. Do `obsah.js` přidej nebo uprav položku. Popisek napiš podle toho, co autor řekl. Když neřekl, napiš neutrální a označ mu ho k doplnění.
-6. **Smaž originál z `nove-obrazky/`** a spusť plnou kontrolu.
-7. **Commit podle orgánu** (`Měchýř: …`). Do popisu commitu ani do názvu souboru nedávej nic z hlavičky (datum, ID).
-8. **Autorovi pošli přehled:** co jsi zpracoval, co jsi ořízl a co jsi naopak nezveřejnil a proč.
+1. **Vezmi přílohu jako soubor** a zkopíruj ji do dočasné složky **mimo repozitář** (např. `/tmp/nove/`). Obrázek nikdy nepřekresluj ani negeneruj podle toho, co vidíš. Když máš jen náhled vložený do textu, a ne soubor, požádej autora, ať ho pošle jako přílohu.
+2. **Prohlédni ho.** U videa se podívej na první, prostřední a poslední snímek: `ffmpeg -i x -vf "select='eq(n\,0)+eq(n\,N/2)+eq(n\,N-1)',tile=3x1" -frames:v 1 nahled.png`. Hledej vpisovaný text: jméno, ID, rodné číslo, datum a čas, nemocnici, oddělení.
+3. **Ořízni hlavičku a vše s údaji.** Obrázek: `magick x.png -crop ŠxV+X+Y +repage y.png`, video: `-vf crop=Š:V:X:Y`. Hloubkovou stupnici a technické parametry přístroje můžeš nechat. Výsledek si znovu prohlédni.
+4. **Odstraň metadata a převeď formát.**
+   - Obrázky: `-strip`, delší strana max. 1600 px.
+   - Video: `ffmpeg … -c:v libx264 -crf 26 -pix_fmt yuv420p -movflags +faststart -an -map_metadata -1 x.mp4`, šířka max. 1280 px, max. 10 MB. Delší video zkrať a řekni to autorovi.
+5. **Ověř, že je to autorův snímek.** Vodoznak cizího webu (např. „POCUS 101"), popisky převzaté z článku nebo ikona prohlížeče v rohu znamenají snímek z internetu. Ten nezveřejňuj a zeptej se autora na licenci (viz „Cizí obsah").
+6. **Do `obrazky/` ulož jen hotový výsledek**, pojmenovaný podle pravidla 3. **Originál nikdy necommituj, ani do jiné složky.** Repozitář je veřejný a co se commitne, je veřejné navždy.
+7. **Zapiš snímek do `obsah.js`:** přidej nebo uprav položku. Popisek napiš podle toho, co autor řekl. Když nic neřekl, napiš neutrální a označ mu ho k doplnění. Pak spusť plnou kontrolu.
+8. **Commitni podle orgánu** (`Měchýř: …`). Do popisu commitu ani do názvu souboru nedávej nic z hlavičky (datum, ID).
+9. **Pošli autorovi přehled:** co jsi zpracoval, co jsi ořízl, co jsi naopak nezveřejnil a proč.
 
-Když autor píše, že video nejde nahrát: web GitHubu bere soubory do 25 MB. Poraď mu export MP4 z přístroje, nebo zmenšení v HandBrake (předvolba *Fast 720p30*) – viz `nove-obrazky/README.md`.
+Velké video, které nejde přiložit: poraď autorovi export MP4 z přístroje, nebo zmenšení v programu HandBrake (zdarma, předvolba *Fast 720p30*).
 
 Nástroje: když chybí `magick` nebo `ffmpeg`, nainstaluj je (`apt-get install -y imagemagick ffmpeg`, případně `pip install pillow imageio-ffmpeg`).
 
@@ -70,10 +68,10 @@ Historie změn je jediný záznam o tom, co a proč se v aplikaci měnilo – au
 
 ## Bezpečnost a soukromí
 
-Autor je lékař a pracuje s daty pacientů. **Co se dostane do zveřejňovaných souborů (`obrazky/`, `obsah.js`, `index.html`, `app.js`, `styl.css`), je veřejné a zůstane ve veřejné historii navždy** – smazání ani `git revert` ho odtud neodstraní. Proto se kontroluje **před** uložením, ne po něm. Surové snímky smí být jen v `nove-obrazky/` (tento repozitář je soukromý), nikdy jinde.
+Autor je lékař a pracuje s daty pacientů. **Všechno, co se uloží do repozitáře, je veřejné a zůstane v historii navždy** – smazání souboru ani `git revert` ho z historie neodstraní. Proto se kontroluje **před** uložením, ne po něm.
 
 **Údaje pacientů – nikdy**
-- Na každém snímku a videu zkontroluj vpisovaný text: jméno, rodné číslo, datum narození, číslo pojištěnce, datum a čas vyšetření, číslo vyšetření, název nemocnice nebo oddělení. U videa první, prostřední a poslední snímek. Když tam něco je, **neukládej** – ořízni to (`magick x.jpg -crop …`), nebo požádej autora o oříznutou verzi.
+- Postup zpracování je v sekci „Nové obrázky a videa". Na každém snímku a videu zkontroluj vpisovaný text: jméno, rodné číslo, datum narození, číslo pojištěnce, datum a čas vyšetření, číslo vyšetření, název nemocnice nebo oddělení. U videa první, prostřední a poslední snímek. Když tam něco je, **neukládej** – ořízni to (`magick x.jpg -crop …`), nebo požádej autora o oříznutou verzi.
 - Metadata vždy odstraň: obrázky `magick x.jpg -strip x.jpg`, videa `ffmpeg -i x.mp4 -map_metadata -1 -c copy y.mp4`. Fotky z telefonu nesou GPS polohu.
 - Soubory DICOM (`.dcm`) a exporty z nemocničního systému nikdy – jen anonymizovaný snímek převedený na `.jpg`/`.mp4`.
 - Ani v textech: žádná jména, iniciály, rodná čísla, data, čísla pokojů ani popisy případů, podle kterých by šlo pacienta poznat (věk + datum + oddělení + vzácná diagnóza). Kazuistiky jen obecně a anonymně.
@@ -91,7 +89,7 @@ Autor je lékař a pracuje s daty pacientů. **Co se dostane do zveřejňovanýc
 
 **Web a nastavení**
 - Žádné formuláře, které něco odesílají, žádná analytika, sledování, cookies ani skripty z dalších serverů. Aplikace nic nesbírá.
-- Neměň nastavení repozitářů (viditelnost, spolupracovníky, oprávnění, klíče a tajné hodnoty), automatickou kontrolu ani zveřejňování v `.github/workflows/` bez výslovného souhlasu autora. Kontrolu nikdy nevypínej. **Tento repozitář nikdy nepřepínej na veřejný.**
+- Neměň nastavení repozitáře (viditelnost, spolupracovníky, oprávnění), automatickou kontrolu ani zveřejňování v `.github/workflows/` bez výslovného souhlasu autora. Kontrolu nikdy nevypínej.
 
 **Když už se něco citlivého uložilo**
 Okamžitě přestaň a řekni to autorovi, nic tiše „neopravuj". Odstranění z historie (přepis historie, čištění u GitHubu) je nevratný krok – udělá ho autor, případně s Jiřím Matelou, nikdy agent sám.
@@ -108,7 +106,7 @@ Aplikaci otevírají sestry na čemkoli: nemocniční počítač s Windows (Edge
 2. Průběžně při práci: `node test/kontrola.js --rychle` (jen Chromium, pár sekund).
 3. **Před každým uložením plná kontrola:** `node test/kontrola.js`. Projde 3 prohlížeče × telefon (360 px), tablet a počítač přes lokální server, který se chová jako GitHub Pages (rozlišuje velká a malá písmena), a navíc otevření `index.html` ze souboru. Hlídá mimo jiné: chyby JavaScriptu, načtení stylů a ikon, klikání na tělo i tlačítka, galerii (obrázek, video, zvětšení, rámeček u chybějícího obrázku), kalkulačky včetně desetinné čárky, posouvání stránky do strany na telefonu, velikost tlačítek na dotyk, formát/název/velikost souborů v `obrazky/`.
 4. Upozornění „chybí obrázek" nevadí. **Každá CHYBA se musí opravit** – v aplikaci, ne v testu.
-5. **Po uložení zkontroluj výsledek na GitHubu** (`gh run watch` nebo záložka Actions). Když kontrola na GitHubu selže, web se nezveřejnil: oprav to hned dalším commitem. Pak ověř živý web: `node test/kontrola.js --adresa https://<uzivatel>.github.io/pocus-jip/` (Pages se po přenosu aktualizují ještě 1–2 minuty).
+5. **Po uložení zkontroluj výsledek na GitHubu** (`gh run watch` nebo záložka Actions). Když kontrola na GitHubu selže, web se nezveřejnil: oprav to hned dalším commitem. Pak ověř živý web: `node test/kontrola.js --adresa https://<uzivatel>.github.io/pocus-jip/`.
 
 **Když něco z toho nejde** (prohlížeč se nedá nainstalovat, chybí síť): napiš autorovi výslovně, co neotestovalo (kontrola to vypíše jako „NEOTESTOVÁNO"). Nikdy netvrď, že je otestováno, co neproběhlo. Kontrola na GitHubu proběhne stejně.
 
