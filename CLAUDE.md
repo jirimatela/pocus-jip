@@ -30,8 +30,21 @@ Web běží na GitHub Pages. Po uložení do `main` spustí GitHub plnou kontrol
    - **Nová barva** (mimo amber/purple/cyan/rose/emerald): doplň ji do `BARVY` v `app.js` i v `test/kontrola.js` (celé názvy tříd vypsané, Tailwind z CDN jinak třídu nevygeneruje).
    - **Nová kalkulačka:** blok s `data-kalkulacka="nazev"` v `index.html`, výpočet ve funkci `prepocitej` v `app.js`, název do `KALKULACKY` a test se známým výsledkem do `TESTY_KALKULACEK` v `test/kontrola.js`.
 7. **Testuj podle sekce „Testování" níže.** Bez prošlé kontroly nic neukládej.
-8. **Ukládání:** jeden požadavek = jeden commit s krátkým českým popisem („Plíce: přidán obrázek pleurálního výpotku"). Ukládej rovnou do `main`. Autorovi napiš jednou větou, co se změnilo, a že web se aktualizuje za pár minut (po kontrole na GitHubu).
+8. **Ukládání:** ukládej rovnou do `main` (viz „Commity" níže). Autorovi napiš jednou větou, co se změnilo, a že web se aktualizuje za pár minut (po kontrole na GitHubu).
 9. **Vrácení změny:** když autor napíše „vrať to", použij `git revert` na příslušný commit (historii nepřepisuj).
+
+## Commity
+
+Historie změn je jediný záznam o tom, co a proč se v aplikaci měnilo – autor v ní hledá, co vrátit.
+
+- **Jeden požadavek autora = jeden commit.** Nemíchej obsah (texty, obrázky) s úpravami kódu nebo kontroly; když požadavek potřebuje obojí, udělej dva commity.
+- **První řádek česky, do ~70 znaků, ve tvaru `Oblast: co se změnilo`.** Oblast = orgán (`Žaludek`, `Měchýř`, `Plíce`, `DVT`, `PVK`) nebo `Aplikace`, `Kontrola`, `Pravidla`. Příklady:
+  - `Plíce: přidán snímek B-linií`
+  - `Žaludek: upraveno varování o aspiraci`
+  - `Aplikace: tlačítka na telefonu se zalamují`
+- **Když důvod není zřejmý, přidej po prázdném řádku proč** (např. „na přání autora po workshopu", „na iPhonu se video nespouštělo").
+- **V popisu nikdy** údaje pacientů, jména, ani nic z části „Bezpečnost a soukromí".
+- **Historii nepřepisuj:** žádný `--force`, žádné `--amend` nebo `rebase` po odeslání. Chyby se opravují dalším commitem, vracení přes `git revert`.
 
 ## Bezpečnost a soukromí
 
