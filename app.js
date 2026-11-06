@@ -215,8 +215,8 @@
         const grv = Math.max(0, 27 + 14.6 * cislo("input-csa") - 1.28 * cislo("input-age"));
         $("res-grv").innerText = `${grv.toFixed(1)} ml`;
 
-        // Objem měchýře: šířka × výška × hloubka × 0.52
-        const mechyr = cislo("b-w") * cislo("b-h") * cislo("b-d") * 0.52;
+        // Objem měchýře: šířka × výška × hloubka × 0.7
+        const mechyr = cislo("b-w") * cislo("b-h") * cislo("b-d") * 0.7;
         $("res-bladder").innerText = `${mechyr.toFixed(1)} ml`;
     }
 

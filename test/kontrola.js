@@ -33,7 +33,7 @@ const KALKULACKY = ["grv", "mechyr"];                           // data-kalkulac
 const TESTY_KALKULACEK = {                                      // známé vstupy → známý výsledek
     grv:    [{ vstupy: { "#input-csa": "4,5", "#input-age": "65" }, vystup: "#res-grv", cekam: "9.5 ml" },
              { vstupy: { "#input-csa": "4.5", "#input-age": "65" }, vystup: "#res-grv", cekam: "9.5 ml" }],
-    mechyr: [{ vstupy: { "#b-w": "6", "#b-h": "7", "#b-d": "5" }, vystup: "#res-bladder", cekam: "109.2 ml" }]
+    mechyr: [{ vstupy: { "#b-w": "6", "#b-h": "7", "#b-d": "5" }, vystup: "#res-bladder", cekam: "147.0 ml" }]
 };
 const PROHLIZECE = RYCHLE ? ["chromium"] : ["chromium", "firefox", "webkit"];
 const OBRAZOVKY = {
